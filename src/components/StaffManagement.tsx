@@ -25,6 +25,8 @@ import {
     Key
 } from 'lucide-react';
 import { useStaffList, useRolesList, useCreateStaff, useDeleteStaff, usePatchStaffRole, useUpdateStaff } from '../hooks/useApi';
+import { usePermission } from '../hooks/usePermission';
+import { Permission } from '../auth/permissions';
 
 // Modal Component
 const Modal: React.FC<{
@@ -120,6 +122,7 @@ const isActiveStaffMutation = (variables: any, currentPk: number | string) => {
 };
 
 export const StaffManagement: React.FC = () => {
+    const { hasPermission } = usePermission()
     const theme = {
         primary: '#2596be',
         primaryLight: '#2596be15',
@@ -242,25 +245,27 @@ export const StaffManagement: React.FC = () => {
                     >
                         <RefreshCw className="w-5 h-5" />
                     </button>
-                    <button
-                        onClick={() => setIsCreateModalOpen(true)}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 shadow-lg"
-                        style={{
-                            background: theme.primaryGradient,
-                            boxShadow: `0 4px 12px ${theme.primary}44`
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'translateY(-2px)';
-                            e.currentTarget.style.boxShadow = `0 8px 20px ${theme.primary}55`;
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'translateY(0)';
-                            e.currentTarget.style.boxShadow = `0 4px 12px ${theme.primary}44`;
-                        }}
-                    >
-                        <UserPlus className="w-4 h-4" />
-                        Register Staff
-                    </button>
+                    {hasPermission(Permission.STAFF_CREATE) && (
+                        <button
+                            onClick={() => setIsCreateModalOpen(true)}
+                            className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 shadow-lg"
+                            style={{
+                                background: theme.primaryGradient,
+                                boxShadow: `0 4px 12px ${theme.primary}44`
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                e.currentTarget.style.boxShadow = `0 8px 20px ${theme.primary}55`;
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = `0 4px 12px ${theme.primary}44`;
+                            }}
+                        >
+                            <UserPlus className="w-4 h-4" />
+                            Register Staff
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -449,25 +454,29 @@ export const StaffManagement: React.FC = () => {
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center justify-end gap-2">
-                                                <button
-                                                    onClick={() => handleEditClick(member)}
-                                                    className="p-1.5 rounded-lg hover:bg-blue-50 transition-colors text-slate-400 hover:text-blue-600 group"
-                                                    title="Edit Staff"
-                                                >
-                                                    <Edit2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDelete(member.pk, member.full_name)}
-                                                    disabled={deleteStaffMutation.isPending}
-                                                    className="p-1.5 rounded-lg hover:bg-red-50 transition-colors text-slate-400 hover:text-red-600 disabled:opacity-50 disabled:cursor-not-allowed group"
-                                                    title="Terminate Staff"
-                                                >
-                                                    {deleteStaffMutation.isPending && isActiveStaffMutation(deleteStaffMutation.variables, member.pk) ? (
-                                                        <span className="inline-block animate-spin rounded-full h-4 w-4 border-2 border-red-500 border-t-transparent" />
-                                                    ) : (
-                                                        <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                                                    )}
-                                                </button>
+                                                {hasPermission(Permission.STAFF_UPDATE) && (
+                                                    <button
+                                                        onClick={() => handleEditClick(member)}
+                                                        className="p-1.5 rounded-lg hover:bg-blue-50 transition-colors text-slate-400 hover:text-blue-600 group"
+                                                        title="Edit Staff"
+                                                    >
+                                                        <Edit2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                                                    </button>
+                                                )}
+                                                {hasPermission(Permission.STAFF_DELETE) && (
+                                                    <button
+                                                        onClick={() => handleDelete(member.pk, member.full_name)}
+                                                        disabled={deleteStaffMutation.isPending}
+                                                        className="p-1.5 rounded-lg hover:bg-red-50 transition-colors text-slate-400 hover:text-red-600 disabled:opacity-50 disabled:cursor-not-allowed group"
+                                                        title="Terminate Staff"
+                                                    >
+                                                        {deleteStaffMutation.isPending && isActiveStaffMutation(deleteStaffMutation.variables, member.pk) ? (
+                                                            <span className="inline-block animate-spin rounded-full h-4 w-4 border-2 border-red-500 border-t-transparent" />
+                                                        ) : (
+                                                            <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                                                        )}
+                                                    </button>
+                                                )}
                                             </div>
                                         </td>
                                     </tr>

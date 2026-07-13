@@ -18,6 +18,8 @@ import {
     Activity
 } from 'lucide-react';
 import { useRolesList, useCreateRole, useDeleteRole, useRoleAudit, useUpdateRole } from '../hooks/useApi';
+import { Permission } from '../auth/permissions';
+import { usePermission } from '../hooks/usePermission';
 
 // Modal Component
 const Modal: React.FC<{
@@ -315,6 +317,8 @@ export const RolesManagement: React.FC = () => {
     // Check if audit data is an array (list of audit entries)
     const isAuditArray = Array.isArray(auditData);
 
+    const { hasPermission } = usePermission();
+
     return (
         <div className="space-y-6">
             {/* Header */}
@@ -328,25 +332,27 @@ export const RolesManagement: React.FC = () => {
                         Manage user roles and permissions across the platform
                     </p>
                 </div>
-                <button
-                    onClick={() => setIsCreateModalOpen(true)}
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 shadow-lg"
-                    style={{
-                        background: `linear-gradient(135deg, ${theme.primary}, ${theme.primaryDark})`,
-                        boxShadow: `0 4px 12px ${theme.primary}44`
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'translateY(-2px)';
-                        e.currentTarget.style.boxShadow = `0 8px 20px ${theme.primary}55`;
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.boxShadow = `0 4px 12px ${theme.primary}44`;
-                    }}
-                >
-                    <Plus className="w-4 h-4" />
-                    Create Role
-                </button>
+                {hasPermission(Permission.ROLES_ADMIN_CREATE) && (
+                    <button
+                        onClick={() => setIsCreateModalOpen(true)}
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 shadow-lg"
+                        style={{
+                            background: `linear-gradient(135deg, ${theme.primary}, ${theme.primaryDark})`,
+                            boxShadow: `0 4px 12px ${theme.primary}44`
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = `0 8px 20px ${theme.primary}55`;
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = `0 4px 12px ${theme.primary}44`;
+                        }}
+                    >
+                        <Plus className="w-4 h-4" />
+                        Create Role
+                    </button>
+                )}
             </div>
 
             {/* Stats Cards */}
@@ -454,23 +460,23 @@ export const RolesManagement: React.FC = () => {
                                                 >
                                                     <History className="w-4 h-4" />
                                                 </button>
-                                                {!role.is_locked && (
-                                                    <>
-                                                        <button
-                                                            onClick={() => handleEditClick(role)}
-                                                            className="p-1.5 rounded-lg hover:bg-blue-50 transition-colors text-slate-500 hover:text-blue-600"
-                                                            title="Edit Role"
-                                                        >
-                                                            <Edit2 className="w-4 h-4" />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleDelete(String(role.pk), role.name)}
-                                                            className="p-1.5 rounded-lg hover:bg-red-50 transition-colors text-slate-500 hover:text-red-600"
-                                                            title="Delete Role"
-                                                        >
-                                                            <Trash2 className="w-4 h-4" />
-                                                        </button>
-                                                    </>
+                                                {!role.is_locked && hasPermission(Permission.ROLES_ADMIN_UPDATE) && (
+                                                    <button
+                                                        onClick={() => handleEditClick(role)}
+                                                        className="p-1.5 rounded-lg hover:bg-blue-50 transition-colors text-slate-500 hover:text-blue-600"
+                                                        title="Edit Role"
+                                                    >
+                                                        <Edit2 className="w-4 h-4" />
+                                                    </button>
+                                                )}
+                                                {!role.is_locked && hasPermission(Permission.ROLES_ADMIN_DELETE) && (
+                                                    <button
+                                                        onClick={() => handleDelete(String(role.pk), role.name)}
+                                                        className="p-1.5 rounded-lg hover:bg-red-50 transition-colors text-slate-500 hover:text-red-600"
+                                                        title="Delete Role"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
                                                 )}
                                                 {role.is_locked && (
                                                     <span className="text-xs text-slate-400 italic">Protected</span>

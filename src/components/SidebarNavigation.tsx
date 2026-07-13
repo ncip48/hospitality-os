@@ -1,9 +1,15 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { NAV_ITEMS, THEME } from '../constants';
+import { usePermission } from '../hooks/usePermission';
 
 export const SidebarNavigation: React.FC = () => {
     const location = useLocation();
+    const { hasPermission } = usePermission();
+
+    const visibleItems = NAV_ITEMS.filter(item =>
+        hasPermission(item.permission)
+    );
 
     return (
         <nav className="flex-1 px-4 py-6 relative">
@@ -12,7 +18,7 @@ export const SidebarNavigation: React.FC = () => {
             </div>
 
             <div className="space-y-1">
-                {NAV_ITEMS.map((item) => {
+                {visibleItems.map((item) => {
                     const isActive = location.pathname === item.path;
                     const Icon = item.icon;
 

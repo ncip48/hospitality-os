@@ -5,6 +5,7 @@ import {
     Users,
     Shield
 } from 'lucide-react';
+import { Permission } from '../auth/permissions';
 
 export const THEME = {
     primary: '#2596be',
@@ -13,13 +14,39 @@ export const THEME = {
     primaryGradient: 'linear-gradient(135deg, #2596be, #1a7a9e)'
 };
 
+
 export const NAV_ITEMS = [
-    { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { path: '/kiosk', icon: Fingerprint, label: 'Attendance Kiosk' },
-    { path: '/enroll', icon: UserPlus, label: 'Staff Enrollment' },
-    { path: '/staff', icon: Users, label: 'Staff Directory' },
-    { path: '/roles', icon: Shield, label: 'System Roles' }
-];
+    {
+        path: '/dashboard',
+        icon: LayoutDashboard,
+        label: 'Dashboard',
+        permission: Permission.DASHBOARD_VIEW,
+    },
+    {
+        path: '/kiosk',
+        icon: Fingerprint,
+        label: 'Attendance Kiosk',
+        permission: null,
+    },
+    {
+        path: '/enroll',
+        icon: UserPlus,
+        label: 'Staff Enrollment',
+        permission: Permission.STAFF_CREATE,
+    },
+    {
+        path: '/staff',
+        icon: Users,
+        label: 'Staff Directory',
+        permission: Permission.STAFF_VIEW,
+    },
+    {
+        path: '/roles',
+        icon: Shield,
+        label: 'System Roles',
+        permission: Permission.ROLES_ADMIN_VIEW,
+    },
+] as const;
 
 export const PAGE_DESCRIPTIONS: Record<string, string> = {
     '/dashboard': 'Your dashboard today',
