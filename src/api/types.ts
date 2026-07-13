@@ -56,7 +56,7 @@ export interface Role {
     is_system: boolean;
     is_locked: boolean;
     is_kiosk_only: boolean;
-    permissions: Record<string, unknown>;
+    permissions: string[];
     staff_count: number;
 }
 
@@ -87,7 +87,7 @@ export interface RoleRequest {
     name: string;
     color: string;
     is_kiosk_only: boolean;
-    permissions?: Record<string, unknown>;
+    permissions?: string[];
 }
 
 export interface PaginatedRoleList {

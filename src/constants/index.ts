@@ -32,7 +32,7 @@ export const NAV_ITEMS = [
         path: '/enroll',
         icon: UserPlus,
         label: 'Staff Enrollment',
-        permission: Permission.STAFF_CREATE,
+        permission: Permission.STAFF_UPDATE,
     },
     {
         path: '/staff',

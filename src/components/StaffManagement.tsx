@@ -386,7 +386,7 @@ export const StaffManagement: React.FC = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-200">
-                                {filteredStaff?.map((member: any) => (
+                                {filteredStaff?.map((member) => (
                                     <tr key={member.pk} className="hover:bg-slate-50/50 transition-colors group">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
@@ -431,26 +431,30 @@ export const StaffManagement: React.FC = () => {
                                             }
                                         </td>
                                         <td className="px-6 py-4">
-                                            <select
-                                                value={member.role?.pk || ''}
-                                                onChange={(e) => handleRoleChangePatch(member.pk, e.target.value)}
-                                                disabled={patchRoleMutation.isPending}
-                                                className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all appearance-none pr-8"
-                                                style={{
-                                                    borderColor: '#e2e8f0',
-                                                    outlineColor: theme.primary
-                                                }}
-                                            >
-                                                {rolesData?.results.map((r: any) => (
-                                                    <option key={r.pk} value={r.pk}>{r.name}</option>
-                                                ))}
-                                            </select>
-                                            {patchRoleMutation.isPending && isActiveStaffMutation(patchRoleMutation.variables, member.pk) && (
-                                                <span className="ml-2 inline-flex items-center gap-1 text-xs text-blue-600">
-                                                    <span className="inline-block animate-spin rounded-full h-3 w-3 border-2 border-blue-600 border-t-transparent" />
-                                                    Updating...
-                                                </span>
-                                            )}
+                                            {hasPermission(Permission.STAFF_UPDATE) && hasPermission(Permission.ROLES_ADMIN_VIEW) ? (
+                                                <>
+                                                    <select
+                                                        value={member.role?.pk || ''}
+                                                        onChange={(e) => handleRoleChangePatch(member.pk, e.target.value)}
+                                                        disabled={patchRoleMutation.isPending}
+                                                        className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all appearance-none pr-8"
+                                                        style={{
+                                                            borderColor: '#e2e8f0',
+                                                            outlineColor: theme.primary
+                                                        }}
+                                                    >
+                                                        {rolesData?.results.map((r: any) => (
+                                                            <option key={r.pk} value={r.pk}>{r.name}</option>
+                                                        ))}
+                                                    </select>
+                                                    {patchRoleMutation.isPending && isActiveStaffMutation(patchRoleMutation.variables, member.pk) && (
+                                                        <span className="ml-2 inline-flex items-center gap-1 text-xs text-blue-600">
+                                                            <span className="inline-block animate-spin rounded-full h-3 w-3 border-2 border-blue-600 border-t-transparent" />
+                                                            Updating...
+                                                        </span>
+                                                    )}
+                                                </>
+                                            ) : <>{member.role.name}</>}
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center justify-end gap-2">

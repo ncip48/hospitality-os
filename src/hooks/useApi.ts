@@ -79,6 +79,7 @@ export const useMe = () => {
         queryKey: ['me'],
         queryFn: getMe,
         retry: false,
+        placeholderData: (previousData) => previousData,
     });
 };
 
