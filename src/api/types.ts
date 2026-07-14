@@ -122,5 +122,53 @@ export interface AttendanceSummary {
     verification_method: string
 }
 
+// ==========================================
+// 4. Menu Category Types
+// ==========================================
+export interface MenuCategory {
+    pk: number;
+    name: string;
+    sort_order?: number;
+    item_count?: number; // Live calculation counter for items assigned to this category
+}
 
+export interface MenuCategoryRequest {
+    name: string;
+    sort_order?: number;
+}
 
+export interface PaginatedMenuCategoryList {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: MenuCategory[];
+}
+
+// ==========================================
+// 5. Menu Item Types
+// ==========================================
+export interface MenuItem {
+    pk: number;
+    name: string;
+    category: MenuCategory | null;
+    price: string; // Transmitted as string to preserve exact decimal precision
+    description?: string;
+    status: 'available' | 'soldout';
+    is_popular: boolean;
+}
+
+export interface MenuItemRequest {
+    name: string;
+    category_id: string | number;
+    price: string;
+    description?: string;
+    status?: 'available' | 'soldout';
+    is_popular?: boolean;
+}
+
+export interface PaginatedMenuItemList {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: MenuItem[];
+}

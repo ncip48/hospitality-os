@@ -3,7 +3,9 @@ import {
     Fingerprint,
     UserPlus,
     Users,
-    Shield
+    Shield,
+    FolderKanban,
+    UtensilsCrossed
 } from 'lucide-react';
 import { Permission } from '../auth/permissions';
 
@@ -45,6 +47,18 @@ export const NAV_ITEMS = [
         icon: Shield,
         label: 'System Roles',
         permission: Permission.ROLES_ADMIN_VIEW,
+    },
+    {
+        path: '/menu-categories',
+        icon: FolderKanban,
+        label: 'Menu Categories',
+        permission: Permission.MENU_VIEW,
+    },
+    {
+        path: '/menu-items',
+        icon: UtensilsCrossed,
+        label: 'Menu Items',
+        permission: Permission.MENU_VIEW,
     },
 ] as const;
 

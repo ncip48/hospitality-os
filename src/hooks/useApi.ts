@@ -16,13 +16,23 @@ import {
     updateStaff,
     updateRole,
     getStaffAttendanceHistory,
-    getTodayAttendance
+    getTodayAttendance,
+    createMenuCategory,
+    createMenuItem,
+    deleteMenuCategory,
+    deleteMenuItem,
+    getMenuCategories,
+    getMenuItems,
+    updateMenuCategory,
+    updateMenuItem
 } from '../api/client';
 import type {
     LoginRequest, KioskEnrollRequest, KioskMatchFaceRequest,
     KioskVerifyLivenessRequest, KioskClockRequest,
     RoleRequest,
-    StaffRequest
+    StaffRequest,
+    MenuItemRequest,
+    MenuCategoryRequest
 } from '../api/types';
 
 export const useLogin = () => {
@@ -185,5 +195,74 @@ export const useStaffAttendanceHistory = (staffSubId: string, enabled: boolean) 
         queryKey: ['staffAttendanceHistory', staffSubId],
         queryFn: () => getStaffAttendanceHistory(staffSubId),
         enabled,
+    });
+};
+
+// --- Menu Category hooks ---
+export const useMenuCategories = (page = 1) => useQuery({
+    queryKey: ['menuCategories', page],
+    queryFn: () => getMenuCategories(page),
+});
+
+export const useCreateMenuCategory = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: MenuCategoryRequest) => createMenuCategory(data),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['menuCategories'] }),
+    });
+};
+
+export const useUpdateMenuCategory = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ pk, data }: { pk: string | number, data: MenuCategoryRequest }) => updateMenuCategory(pk, data),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['menuCategories'] }),
+    });
+};
+
+export const useDeleteMenuCategory = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (pk: string | number) => deleteMenuCategory(pk),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['menuCategories'] }),
+    });
+};
+
+// --- Menu Item hooks ---
+export const useMenuItems = (page = 1, categoryId?: string) => useQuery({
+    queryKey: ['menuItems', page, categoryId],
+    queryFn: () => getMenuItems(page, categoryId),
+});
+
+export const useCreateMenuItem = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: MenuItemRequest) => createMenuItem(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['menuItems'] });
+            queryClient.invalidateQueries({ queryKey: ['menuCategories'] }); // Triggers list item-count recalculation[cite: 2]
+        },
+    });
+};
+
+export const useUpdateMenuItem = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ pk, data }: { pk: string | number, data: MenuItemRequest }) => updateMenuItem(pk, data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['menuItems'] });
+            queryClient.invalidateQueries({ queryKey: ['menuCategories'] });
+        },
+    });
+};
+
+export const useDeleteMenuItem = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (pk: string | number) => deleteMenuItem(pk),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['menuItems'] });
+            queryClient.invalidateQueries({ queryKey: ['menuCategories'] });
+        },
     });
 };

@@ -12,6 +12,11 @@ export const Permission = {
     ROLES_ADMIN_CREATE: 'rolesadmin:create',
     ROLES_ADMIN_UPDATE: 'rolesadmin:edit',
     ROLES_ADMIN_DELETE: 'rolesadmin:delete',
+
+    MENU_VIEW: 'menu:view',
+    MENU_CREATE: 'menu:create',
+    MENU_UPDATE: 'menu:edit',
+    MENU_DELETE: 'menu:delete',
 } as const;
 
 export type Permission =

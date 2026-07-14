@@ -9,7 +9,13 @@ import type {
     Role,
     RoleRequest,
     StaffRequest,
-    AttendanceSummary
+    AttendanceSummary,
+    PaginatedMenuCategoryList,
+    PaginatedMenuItemList,
+    MenuItem,
+    MenuCategory,
+    MenuItemRequest,
+    MenuCategoryRequest
 } from './types';
 
 export const apiClient = axios.create({
@@ -168,4 +174,50 @@ export const getTodayAttendance = async (): Promise<AttendanceSummary[]> => {
 export const getStaffAttendanceHistory = async (staffSubId: string): Promise<AttendanceSummary[]> => {
     const response = await apiClient.get(`/api/attendance/${staffSubId}/`);
     return response.data;
+};
+
+// --- Menu Categories Operations ---
+export const getMenuCategories = async (page = 1): Promise<PaginatedMenuCategoryList> => {
+    const response = await apiClient.get('/api/menu-categories/', { params: { page } });
+    return response.data;
+};
+
+export const createMenuCategory = async (data: MenuCategoryRequest): Promise<MenuCategory> => {
+    const response = await apiClient.post('/api/menu-categories/', data);
+    return response.data;
+};
+
+export const updateMenuCategory = async (
+    pk: number | string,
+    data: MenuCategoryRequest
+): Promise<MenuCategory> => {
+    const response = await apiClient.patch(`/api/menu-categories/${pk}/`, data);
+    return response.data;
+};
+
+export const deleteMenuCategory = async (pk: number | string): Promise<void> => {
+    await apiClient.delete(`/api/menu-categories/${pk}/`);
+};
+
+// --- Menu Items Operations ---
+export const getMenuItems = async (page = 1, categoryId?: string): Promise<PaginatedMenuItemList> => {
+    const response = await apiClient.get('/api/menu/', { params: { page, category_id: categoryId } });
+    return response.data;
+};
+
+export const createMenuItem = async (data: MenuItemRequest): Promise<MenuItem> => {
+    const response = await apiClient.post('/api/menu/', data);
+    return response.data;
+};
+
+export const updateMenuItem = async (
+    pk: number | string,
+    data: MenuItemRequest
+): Promise<MenuItem> => {
+    const response = await apiClient.patch(`/api/menu/${pk}/`, data);
+    return response.data;
+};
+
+export const deleteMenuItem = async (pk: number | string): Promise<void> => {
+    await apiClient.delete(`/api/menu/${pk}/`);
 };
