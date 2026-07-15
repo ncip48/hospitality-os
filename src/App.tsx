@@ -6,6 +6,8 @@ import { StaffManagement } from './components/StaffManagement';
 import { RolesManagement } from './components/RolesManagement';
 import { DashboardLayout } from './components/DashboardLayout';
 import { Dashboard } from './pages/Dashboard';
+import { MenuCategoryManagement } from './components/MenuCategoryManagement';
+import { MenuItemManagement } from './components/MenuItemManagement';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const token = localStorage.getItem('access_token');
@@ -25,6 +27,8 @@ function App() {
       <Route path="/enroll" element={<PrivateRoute><KioskEnroll /></PrivateRoute>} />
       <Route path="/staff" element={<PrivateRoute><StaffManagement /></PrivateRoute>} />
       <Route path="/roles" element={<PrivateRoute><RolesManagement /></PrivateRoute>} />
+      <Route path="/menu-categories" element={<PrivateRoute><MenuCategoryManagement /></PrivateRoute>} />
+      <Route path="/menu-items" element={<PrivateRoute><MenuItemManagement /></PrivateRoute>} />
 
       {/* Fallback Catch-All Redirector */}
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -41,6 +41,7 @@ export const useLogin = () => {
         mutationFn: (credentials: LoginRequest) => login(credentials),
         onSuccess: (data) => {
             if (data?.access) localStorage.setItem('access_token', data.access);
+            if (data?.refresh) localStorage.setItem('refresh_token', data.refresh);
             navigate('/dashboard');
         },
     });

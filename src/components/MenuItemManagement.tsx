@@ -236,6 +236,7 @@ export const MenuItemManagement: React.FC = () => {
                                 <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Category</th>
                                 <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Pricing</th>
                                 <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Availability</th>
+                                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Popular</th>
                                 <th className="px-6 py-3 text-right text-xs font-semibold text-slate-600 uppercase">Actions</th>
                             </tr>
                         </thead>
@@ -261,13 +262,21 @@ export const MenuItemManagement: React.FC = () => {
                                             {item.category?.name || 'Unassigned'}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 text-sm font-semibold text-emerald-600">${parseFloat(item.price).toFixed(2)}</td>
+                                    <td className="px-6 py-4 text-sm font-semibold text-emerald-600">Rp{parseFloat(item.price)}</td>
                                     <td className="px-6 py-4">
                                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${item.status === 'available'
                                             ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                                             : 'bg-red-50 text-red-700 border-red-200'
                                             }`}>
                                             {item.status === 'available' ? 'In Stock' : 'Sold Out'}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${item.is_popular
+                                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                            : 'bg-red-50 text-red-700 border-red-200'
+                                            }`}>
+                                            {item.is_popular ? 'Yes' : 'No'}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-right">
@@ -318,7 +327,7 @@ export const MenuItemManagement: React.FC = () => {
                             </select>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1.5">Price ($ USD)</label>
+                            <label className="block text-sm font-medium text-slate-700 mb-1.5">Price (IDR)</label>
                             <div className="relative">
                                 <Coins className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                                 <input
@@ -344,16 +353,7 @@ export const MenuItemManagement: React.FC = () => {
                         />
                     </div>
                     <div className="grid grid-cols-2 gap-4 pt-2">
-                        <label className="flex items-center gap-2 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={isPopular}
-                                onChange={(e) => setIsPopular(e.target.checked)}
-                                className="rounded border-slate-300"
-                                style={{ accentColor: theme.primary }}
-                            />
-                            <span className="text-sm font-medium text-slate-700">Star as Popular ✨</span>
-                        </label>
+
                         <div>
                             <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
                             <select
@@ -404,7 +404,7 @@ export const MenuItemManagement: React.FC = () => {
                             </select>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1.5">Price ($ USD)</label>
+                            <label className="block text-sm font-medium text-slate-700 mb-1.5">Price (IDR)</label>
                             <div className="relative">
                                 <Coins className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                                 <input
@@ -429,16 +429,6 @@ export const MenuItemManagement: React.FC = () => {
                         />
                     </div>
                     <div className="grid grid-cols-2 gap-4 pt-2">
-                        <label className="flex items-center gap-2 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={isPopular}
-                                onChange={(e) => setIsPopular(e.target.checked)}
-                                className="rounded border-slate-300"
-                                style={{ accentColor: theme.primary }}
-                            />
-                            <span className="text-sm font-medium text-slate-700">Star as Popular ✨</span>
-                        </label>
                         <div>
                             <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
                             <select

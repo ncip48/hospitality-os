@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import type {
     LoginRequest, KioskClockRequest, KioskClockResponse,
     KioskEnrollRequest, KioskMatchFaceRequest, KioskMatchFaceResponse,
@@ -22,35 +22,109 @@ export const apiClient = axios.create({
     baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080',
 });
 
-// 1. Request Interceptor: Attach JWT token automatically
+interface RetryRequestConfig extends InternalAxiosRequestConfig {
+    _retry?: boolean;
+}
+
+let isRefreshing = false;
+let failedQueue: {
+    resolve: (token: string) => void;
+    reject: (error: unknown) => void;
+}[] = [];
+
+const processQueue = (error: unknown, token?: string) => {
+    failedQueue.forEach((promise) => {
+        if (error) {
+            promise.reject(error);
+        } else {
+            promise.resolve(token!);
+        }
+    });
+
+    failedQueue = [];
+};
+
+// Attach access token
 apiClient.interceptors.request.use((config) => {
-    const token = localStorage.getItem('access_token');
-    if (token && config.headers) {
+    const token = localStorage.getItem("access_token");
+
+    if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
 });
 
-// 2. Response Interceptor: Catch global 401 errors and force logout
+// Refresh token on 401
 apiClient.interceptors.response.use(
-    (response) => {
-        // Pass successful responses right through
-        return response;
-    },
-    (error) => {
-        // Check if the server responded with a 401 Unauthorized status code
-        if (error.response && error.response.status === 401) {
-            console.warn('Session expired or unauthorized token detected. Forcing logout...');
+    (response) => response,
+    async (error: AxiosError) => {
+        const originalRequest = error.config as RetryRequestConfig;
 
-            // Clear out stale authorization items
-            localStorage.removeItem('access_token');
-
-            // Force a hard redirect back to the root login route
-            window.location.href = '/';
+        if (
+            error.response?.status !== 401 ||
+            originalRequest._retry
+        ) {
+            return Promise.reject(error);
         }
 
-        // Return the error so local TanStack Queries/Mutations can still catch it if needed
-        return Promise.reject(error);
+        // Don't refresh when refresh endpoint itself fails
+        if (originalRequest.url?.includes("/auth/refresh")) {
+            logout();
+            return Promise.reject(error);
+        }
+
+        originalRequest._retry = true;
+
+        if (isRefreshing) {
+            return new Promise((resolve, reject) => {
+                failedQueue.push({
+                    resolve: (token) => {
+                        originalRequest.headers.Authorization = `Bearer ${token}`;
+                        resolve(apiClient(originalRequest));
+                    },
+                    reject,
+                });
+            });
+        }
+
+        isRefreshing = true;
+
+        try {
+            const refreshToken = localStorage.getItem("refresh_token");
+
+            if (!refreshToken) {
+                logout();
+                return Promise.reject(error);
+            }
+
+            const { data } = await axios.post(
+                `${import.meta.env.VITE_API_URL}/api/auth/refresh/`,
+                {
+                    refresh: refreshToken,
+                }
+            );
+
+            localStorage.setItem("access_token", data.access);
+
+            apiClient.defaults.headers.common.Authorization =
+                `Bearer ${data.access}`;
+
+            processQueue(null, data.access);
+
+            originalRequest.headers.Authorization =
+                `Bearer ${data.access}`;
+
+            return apiClient(originalRequest);
+        } catch (refreshError) {
+            processQueue(refreshError);
+
+            logout();
+
+            return Promise.reject(refreshError);
+        } finally {
+            isRefreshing = false;
+        }
     }
 );
 
@@ -110,7 +184,11 @@ export const getMe = async (): Promise<Staff> => {
 
 export const logout = async () => {
     // Even if 204 is empty, hitting the endpoint clears the token session server-side
-    await apiClient.post('/api/auth/logout/');
+    // await apiClient.post('/api/auth/logout/');
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+
+    window.location.href = "/";
 };
 
 // --- Roles CRUD Operations ---
