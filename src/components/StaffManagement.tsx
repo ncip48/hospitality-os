@@ -22,6 +22,7 @@ import {
 import { useStaffList, useRolesList, useCreateStaff, useDeleteStaff, usePatchStaffRole, useUpdateStaff } from '../hooks/useApi';
 import { usePermission } from '../hooks/usePermission';
 import { Permission } from '../auth/permissions';
+import { THEME } from '../constants';
 
 // Modal Component
 const Modal: React.FC<{
@@ -122,7 +123,7 @@ const StaffCard: React.FC<{
     return (
         <div className="bg-white rounded-xl border border-slate-200 hover:border-[#2596be]/30 hover:shadow-lg transition-all duration-200 group overflow-hidden">
             {/* Gradient bar */}
-            <div className="h-1" style={{ background: `linear-gradient(90deg, ${theme.primary}, ${theme.primaryDark})` }} />
+            <div className="h-1" style={{ background: `linear-gradient(90deg, ${THEME.primary}, ${THEME.primaryDark})` }} />
 
             <div className="p-5">
                 {/* Header */}
@@ -131,7 +132,7 @@ const StaffCard: React.FC<{
                         <div
                             className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0"
                             style={{
-                                backgroundColor: member.avatar_bg || theme.primary,
+                                backgroundColor: member.avatar_bg || THEME.primary,
                                 color: member.avatar_color || '#fff'
                             }}
                         >
@@ -196,7 +197,7 @@ const StaffCard: React.FC<{
                                 className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all appearance-none pr-8"
                                 style={{
                                     borderColor: '#e2e8f0',
-                                    outlineColor: theme.primary
+                                    outlineColor: THEME.primary
                                 }}
                             >
                                 {rolesData?.results.map((r: any) => (
@@ -240,7 +241,7 @@ const CompactStaffItem: React.FC<{
                     <div
                         className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0"
                         style={{
-                            backgroundColor: member.avatar_bg || theme.primary,
+                            backgroundColor: member.avatar_bg || THEME.primary,
                             color: member.avatar_color || '#fff'
                         }}
                     >
@@ -282,7 +283,7 @@ const CompactStaffItem: React.FC<{
                             className="px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 transition-all appearance-none pr-6"
                             style={{
                                 borderColor: '#e2e8f0',
-                                outlineColor: theme.primary
+                                outlineColor: THEME.primary
                             }}
                         >
                             {rolesData?.results.map((r: any) => (
@@ -322,12 +323,6 @@ const CompactStaffItem: React.FC<{
 
 export const StaffManagement: React.FC = () => {
     const { hasPermission } = usePermission();
-    const theme = {
-        primary: '#2596be',
-        primaryLight: '#2596be15',
-        primaryDark: '#1a7a9e',
-        primaryGradient: 'linear-gradient(135deg, #2596be, #1a7a9e)'
-    };
 
     // View State
     const [viewMode, setViewMode] = useState<'grid' | 'compact'>('grid');
@@ -439,7 +434,7 @@ export const StaffManagement: React.FC = () => {
             <div className="flex items-center justify-between flex-wrap gap-4">
                 <div>
                     <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                        <Users className="w-6 h-6" style={{ color: theme.primary }} />
+                        <Users className="w-6 h-6" style={{ color: THEME.primary }} />
                         Staff Directory
                     </h2>
                     <p className="text-sm text-slate-500 mt-1">
@@ -478,16 +473,16 @@ export const StaffManagement: React.FC = () => {
                             onClick={() => setIsCreateModalOpen(true)}
                             className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 shadow-lg"
                             style={{
-                                background: theme.primaryGradient,
-                                boxShadow: `0 4px 12px ${theme.primary}44`
+                                background: THEME.primaryGradient,
+                                boxShadow: `0 4px 12px ${THEME.primary}44`
                             }}
                             onMouseEnter={(e) => {
                                 e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = `0 8px 20px ${theme.primary}55`;
+                                e.currentTarget.style.boxShadow = `0 8px 20px ${THEME.primary}55`;
                             }}
                             onMouseLeave={(e) => {
                                 e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = `0 4px 12px ${theme.primary}44`;
+                                e.currentTarget.style.boxShadow = `0 4px 12px ${THEME.primary}44`;
                             }}
                         >
                             <UserPlus className="w-4 h-4" />
@@ -540,14 +535,14 @@ export const StaffManagement: React.FC = () => {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all"
-                            style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
+                            style={{ borderColor: '#e2e8f0', outlineColor: THEME.primary }}
                         />
                     </div>
                     <select
                         value={filterEmployment}
                         onChange={(e) => setFilterEmployment(e.target.value as any)}
                         className="px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all appearance-none"
-                        style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
+                        style={{ borderColor: '#e2e8f0', outlineColor: THEME.primary }}
                     >
                         <option value="all">All Types</option>
                         <option value="full_time">Full Time</option>
@@ -576,7 +571,7 @@ export const StaffManagement: React.FC = () => {
                         <button
                             onClick={() => setIsCreateModalOpen(true)}
                             className="mt-4 px-4 py-2 rounded-lg text-white font-medium transition-all duration-200"
-                            style={{ background: theme.primaryGradient, boxShadow: `0 2px 8px ${theme.primary}44` }}
+                            style={{ background: THEME.primaryGradient, boxShadow: `0 2px 8px ${THEME.primary}44` }}
                         >
                             <UserPlus className="w-4 h-4 inline mr-2" />
                             Register Staff
@@ -586,7 +581,7 @@ export const StaffManagement: React.FC = () => {
             ) : viewMode === 'grid' ? (
                 // GRID VIEW
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {filteredStaff.map((member: any) => (
+                    {filteredStaff?.map((member: any) => (
                         <StaffCard
                             key={member.pk}
                             member={member}
@@ -595,7 +590,7 @@ export const StaffManagement: React.FC = () => {
                             onRoleChange={(roleId) => handleRoleChangePatch(member.pk, roleId)}
                             rolesData={rolesData}
                             patchRoleMutation={patchRoleMutation}
-                            theme={theme}
+                            theme={THEME}
                             hasPermission={hasPermission}
                         />
                     ))}
@@ -603,7 +598,7 @@ export const StaffManagement: React.FC = () => {
             ) : (
                 // COMPACT VIEW
                 <div className="space-y-3">
-                    {filteredStaff.map((member: any) => (
+                    {filteredStaff?.map((member: any) => (
                         <CompactStaffItem
                             key={member.pk}
                             member={member}
@@ -612,7 +607,7 @@ export const StaffManagement: React.FC = () => {
                             onRoleChange={(roleId) => handleRoleChangePatch(member.pk, roleId)}
                             rolesData={rolesData}
                             patchRoleMutation={patchRoleMutation}
-                            theme={theme}
+                            theme={THEME}
                             hasPermission={hasPermission}
                         />
                     ))}
@@ -642,7 +637,7 @@ export const StaffManagement: React.FC = () => {
                                 onChange={(e) => setUsername(e.target.value)}
                                 placeholder="e.g., johndoe"
                                 className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-shadow"
-                                style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
+                                style={{ borderColor: '#e2e8f0', outlineColor: THEME.primary }}
                                 required
                             />
                         </div>
@@ -658,7 +653,7 @@ export const StaffManagement: React.FC = () => {
                                 onChange={(e) => setFullName(e.target.value)}
                                 placeholder="e.g., John Doe"
                                 className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-shadow"
-                                style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
+                                style={{ borderColor: '#e2e8f0', outlineColor: THEME.primary }}
                                 required
                             />
                         </div>
@@ -674,7 +669,7 @@ export const StaffManagement: React.FC = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="********"
                                 className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-shadow"
-                                style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
+                                style={{ borderColor: '#e2e8f0', outlineColor: THEME.primary }}
                                 required
                             />
                         </div>
@@ -688,7 +683,7 @@ export const StaffManagement: React.FC = () => {
                                 value={roleId}
                                 onChange={(e) => setRoleId(e.target.value)}
                                 className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-shadow appearance-none"
-                                style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
+                                style={{ borderColor: '#e2e8f0', outlineColor: THEME.primary }}
                                 required
                             >
                                 <option value="">Select a role</option>
@@ -707,7 +702,7 @@ export const StaffManagement: React.FC = () => {
                                 value={employment}
                                 onChange={(e) => setEmployment(e.target.value as any)}
                                 className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-shadow appearance-none"
-                                style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
+                                style={{ borderColor: '#e2e8f0', outlineColor: THEME.primary }}
                             >
                                 <option value="full_time">Full-Time</option>
                                 <option value="part_time">Part-Time</option>
@@ -727,7 +722,7 @@ export const StaffManagement: React.FC = () => {
                             type="submit"
                             disabled={createStaffMutation.isPending}
                             className="flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                            style={{ background: theme.primaryGradient, boxShadow: `0 2px 8px ${theme.primary}44` }}
+                            style={{ background: THEME.primaryGradient, boxShadow: `0 2px 8px ${THEME.primary}44` }}
                         >
                             {createStaffMutation.isPending ? (
                                 <span className="flex items-center justify-center gap-2">
@@ -754,7 +749,7 @@ export const StaffManagement: React.FC = () => {
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-shadow bg-slate-50"
-                                style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
+                                style={{ borderColor: '#e2e8f0', outlineColor: THEME.primary }}
                                 required
                                 disabled
                             />
@@ -771,7 +766,7 @@ export const StaffManagement: React.FC = () => {
                                 value={fullName}
                                 onChange={(e) => setFullName(e.target.value)}
                                 className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-shadow"
-                                style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
+                                style={{ borderColor: '#e2e8f0', outlineColor: THEME.primary }}
                                 required
                             />
                         </div>
@@ -787,7 +782,7 @@ export const StaffManagement: React.FC = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Enter new password or leave blank"
                                 className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-shadow"
-                                style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
+                                style={{ borderColor: '#e2e8f0', outlineColor: THEME.primary }}
                             />
                         </div>
                     </div>
@@ -800,7 +795,7 @@ export const StaffManagement: React.FC = () => {
                                 value={roleId}
                                 onChange={(e) => setRoleId(e.target.value)}
                                 className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-shadow appearance-none"
-                                style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
+                                style={{ borderColor: '#e2e8f0', outlineColor: THEME.primary }}
                                 required
                             >
                                 <option value="">Select a role</option>
@@ -819,7 +814,7 @@ export const StaffManagement: React.FC = () => {
                                 value={employment}
                                 onChange={(e) => setEmployment(e.target.value as any)}
                                 className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-shadow appearance-none"
-                                style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
+                                style={{ borderColor: '#e2e8f0', outlineColor: THEME.primary }}
                             >
                                 <option value="full_time">Full-Time</option>
                                 <option value="part_time">Part-Time</option>
@@ -844,7 +839,7 @@ export const StaffManagement: React.FC = () => {
                             type="submit"
                             disabled={updateStaffMutation.isPending}
                             className="flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                            style={{ background: theme.primaryGradient, boxShadow: `0 2px 8px ${theme.primary}44` }}
+                            style={{ background: THEME.primaryGradient, boxShadow: `0 2px 8px ${THEME.primary}44` }}
                         >
                             {updateStaffMutation.isPending ? (
                                 <span className="flex items-center justify-center gap-2">

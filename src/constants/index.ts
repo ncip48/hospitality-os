@@ -13,7 +13,7 @@ import { Permission } from '../auth/permissions';
 
 export const THEME = {
     primary: '#2596be',
-    primaryLight: '#2596be15',
+    primaryLight: '#2596be',
     primaryDark: '#1a7a9e',
     primaryGradient: 'linear-gradient(135deg, #2596be, #1a7a9e)'
 };

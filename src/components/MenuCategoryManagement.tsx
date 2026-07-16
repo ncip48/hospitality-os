@@ -33,6 +33,7 @@ import {
 } from '../hooks/useApi';
 import { usePermission } from '../hooks/usePermission';
 import { Permission } from '../auth/permissions';
+import { THEME } from '../constants';
 
 // Modal Component
 const Modal: React.FC<{
@@ -153,12 +154,6 @@ const getCategoryBg = (name: string) => {
 
 export const MenuCategoryManagement: React.FC = () => {
     const { hasPermission } = usePermission();
-    const theme = {
-        primary: '#2596be',
-        primaryLight: '#2596be15',
-        primaryDark: '#1a7a9e',
-        primaryGradient: 'linear-gradient(135deg, #2596be, #1a7a9e)'
-    };
 
     // View State
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -240,7 +235,7 @@ export const MenuCategoryManagement: React.FC = () => {
             <div className="flex items-center justify-between flex-wrap gap-4">
                 <div>
                     <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                        <FolderKanban className="w-6 h-6" style={{ color: theme.primary }} />
+                        <FolderKanban className="w-6 h-6" style={{ color: THEME.primary }} />
                         Menu Categories
                     </h2>
                     <p className="text-sm text-slate-500 mt-1">Organize your menu items into categories and subcategories</p>
@@ -253,14 +248,14 @@ export const MenuCategoryManagement: React.FC = () => {
                         <button
                             onClick={() => setIsCreateModalOpen(true)}
                             className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 shadow-lg"
-                            style={{ background: theme.primaryGradient, boxShadow: `0 4px 12px ${theme.primary}44` }}
+                            style={{ background: THEME.primaryGradient, boxShadow: `0 4px 12px ${THEME.primary}44` }}
                             onMouseEnter={(e) => {
                                 e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = `0 8px 20px ${theme.primary}55`;
+                                e.currentTarget.style.boxShadow = `0 8px 20px ${THEME.primary}55`;
                             }}
                             onMouseLeave={(e) => {
                                 e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = `0 4px 12px ${theme.primary}44`;
+                                e.currentTarget.style.boxShadow = `0 4px 12px ${THEME.primary}44`;
                             }}
                         >
                             <FolderPlus className="w-4 h-4" />
@@ -314,7 +309,7 @@ export const MenuCategoryManagement: React.FC = () => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all"
-                        style={{ outlineColor: theme.primary }}
+                        style={{ outlineColor: THEME.primary }}
                     />
                 </div>
 
@@ -354,7 +349,7 @@ export const MenuCategoryManagement: React.FC = () => {
                         <button
                             onClick={() => setIsCreateModalOpen(true)}
                             className="mt-4 px-4 py-2 rounded-lg text-white font-medium transition-all"
-                            style={{ background: theme.primaryGradient }}
+                            style={{ background: THEME.primaryGradient }}
                         >
                             <FolderPlus className="w-4 h-4 inline mr-2" />
                             Create Category
@@ -491,7 +486,7 @@ export const MenuCategoryManagement: React.FC = () => {
                             onChange={(e) => setName(e.target.value)}
                             placeholder="e.g., Cold Brew Coffees"
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                            style={{ outlineColor: theme.primary }}
+                            style={{ outlineColor: THEME.primary }}
                             required
                         />
                         <p className="text-xs text-slate-400 mt-1">This will be used to group related menu items</p>
@@ -504,7 +499,7 @@ export const MenuCategoryManagement: React.FC = () => {
                             value={sortOrder}
                             onChange={(e) => setSortOrder(Number(e.target.value))}
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                            style={{ outlineColor: theme.primary }}
+                            style={{ outlineColor: THEME.primary }}
                             placeholder="0"
                         />
                         <p className="text-xs text-slate-400 mt-1">Lower numbers appear first in the menu</p>
@@ -521,7 +516,7 @@ export const MenuCategoryManagement: React.FC = () => {
                             type="submit"
                             disabled={createCategoryMutation.isPending}
                             className="flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all disabled:opacity-50"
-                            style={{ background: theme.primaryGradient }}
+                            style={{ background: THEME.primaryGradient }}
                         >
                             {createCategoryMutation.isPending ? 'Creating...' : 'Create Category'}
                         </button>
@@ -539,7 +534,7 @@ export const MenuCategoryManagement: React.FC = () => {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                            style={{ outlineColor: theme.primary }}
+                            style={{ outlineColor: THEME.primary }}
                             required
                         />
                     </div>
@@ -551,7 +546,7 @@ export const MenuCategoryManagement: React.FC = () => {
                             value={sortOrder}
                             onChange={(e) => setSortOrder(Number(e.target.value))}
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                            style={{ outlineColor: theme.primary }}
+                            style={{ outlineColor: THEME.primary }}
                         />
                     </div>
                     {editingCategory?.item_count > 0 && (
@@ -572,7 +567,7 @@ export const MenuCategoryManagement: React.FC = () => {
                             type="submit"
                             disabled={updateCategoryMutation.isPending}
                             className="flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all disabled:opacity-50"
-                            style={{ background: theme.primaryGradient }}
+                            style={{ background: THEME.primaryGradient }}
                         >
                             {updateCategoryMutation.isPending ? 'Updating...' : 'Update Category'}
                         </button>

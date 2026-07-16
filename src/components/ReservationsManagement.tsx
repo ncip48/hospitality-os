@@ -23,7 +23,8 @@ import {
     Table,
     Calendar,
     Globe,
-    MessageCircle} from 'lucide-react';
+    MessageCircle
+} from 'lucide-react';
 import { format } from 'date-fns';
 import {
     useReservationsList,
@@ -41,6 +42,7 @@ import {
     useTablesList
 } from '../hooks/useApi';
 import type { Reservation, ReservationStatus, ReservationSource, SuggestTableParams } from '../api/types';
+import { THEME } from '../constants';
 
 const statusColors: Record<ReservationStatus, string> = {
     pending: 'bg-amber-50 text-amber-700 border-amber-200',
@@ -134,13 +136,6 @@ const Modal: React.FC<{
 };
 
 export const ReservationsManagement: React.FC = () => {
-    const theme = {
-        primary: '#2596be',
-        primaryLight: '#2596be15',
-        primaryDark: '#1a7a9e',
-        primaryGradient: 'linear-gradient(135deg, #2596be, #1a7a9e)'
-    };
-
     // View State
     const [viewMode, setViewMode] = useState<'table' | 'grid'>('grid');
 
@@ -277,7 +272,7 @@ export const ReservationsManagement: React.FC = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                        <CalendarDays className="w-6 h-6" style={{ color: theme.primary }} />
+                        <CalendarDays className="w-6 h-6" style={{ color: THEME.primary }} />
                         Reservations
                     </h2>
                     <p className="text-sm text-slate-500 mt-1">Manage bookings, waitlists, and table seating</p>
@@ -301,14 +296,14 @@ export const ReservationsManagement: React.FC = () => {
                     <button
                         onClick={handleOpenCreate}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 shadow-lg"
-                        style={{ background: theme.primaryGradient, boxShadow: `0 4px 12px ${theme.primary}44` }}
+                        style={{ background: THEME.primaryGradient, boxShadow: `0 4px 12px ${THEME.primary}44` }}
                         onMouseEnter={(e) => {
                             e.currentTarget.style.transform = 'translateY(-2px)';
-                            e.currentTarget.style.boxShadow = `0 8px 20px ${theme.primary}55`;
+                            e.currentTarget.style.boxShadow = `0 8px 20px ${THEME.primary}55`;
                         }}
                         onMouseLeave={(e) => {
                             e.currentTarget.style.transform = 'translateY(0)';
-                            e.currentTarget.style.boxShadow = `0 4px 12px ${theme.primary}44`;
+                            e.currentTarget.style.boxShadow = `0 4px 12px ${THEME.primary}44`;
                         }}
                     >
                         <Plus className="w-4 h-4" />
@@ -360,14 +355,14 @@ export const ReservationsManagement: React.FC = () => {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all"
-                            style={{ outlineColor: theme.primary }}
+                            style={{ outlineColor: THEME.primary }}
                         />
                     </div>
                     <select
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value as any)}
                         className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all"
-                        style={{ outlineColor: theme.primary }}
+                        style={{ outlineColor: THEME.primary }}
                     >
                         <option value="all">All Status</option>
                         <option value="pending">Pending</option>
@@ -668,7 +663,7 @@ export const ReservationsManagement: React.FC = () => {
                                 value={formData.guest_name}
                                 onChange={e => setFormData({ ...formData, guest_name: e.target.value })}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                                style={{ outlineColor: theme.primary }}
+                                style={{ outlineColor: THEME.primary }}
                                 placeholder="John Doe"
                             />
                         </div>
@@ -679,7 +674,7 @@ export const ReservationsManagement: React.FC = () => {
                                 value={formData.phone}
                                 onChange={e => setFormData({ ...formData, phone: e.target.value })}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                                style={{ outlineColor: theme.primary }}
+                                style={{ outlineColor: THEME.primary }}
                                 placeholder="+1 234 567 890"
                             />
                         </div>
@@ -692,7 +687,7 @@ export const ReservationsManagement: React.FC = () => {
                                 value={formData.party_size}
                                 onChange={e => setFormData({ ...formData, party_size: parseInt(e.target.value) })}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                                style={{ outlineColor: theme.primary }}
+                                style={{ outlineColor: THEME.primary }}
                             />
                         </div>
                         <div>
@@ -703,7 +698,7 @@ export const ReservationsManagement: React.FC = () => {
                                 value={formData.time}
                                 onChange={e => setFormData({ ...formData, time: e.target.value })}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                                style={{ outlineColor: theme.primary }}
+                                style={{ outlineColor: THEME.primary }}
                             />
                         </div>
                         <div>
@@ -716,7 +711,7 @@ export const ReservationsManagement: React.FC = () => {
                                 value={formData.duration_minutes}
                                 onChange={e => setFormData({ ...formData, duration_minutes: parseInt(e.target.value) })}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                                style={{ outlineColor: theme.primary }}
+                                style={{ outlineColor: THEME.primary }}
                             />
                         </div>
                         <div className="col-span-2">
@@ -725,7 +720,7 @@ export const ReservationsManagement: React.FC = () => {
                                 value={formData.source}
                                 onChange={e => setFormData({ ...formData, source: e.target.value as ReservationSource })}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all bg-white"
-                                style={{ outlineColor: theme.primary }}
+                                style={{ outlineColor: THEME.primary }}
                             >
                                 <option value="website">Website</option>
                                 <option value="whatsapp">WhatsApp</option>
@@ -740,7 +735,7 @@ export const ReservationsManagement: React.FC = () => {
                                 value={formData.notes}
                                 onChange={e => setFormData({ ...formData, notes: e.target.value })}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                                style={{ outlineColor: theme.primary }}
+                                style={{ outlineColor: THEME.primary }}
                                 placeholder="Special requests, allergies, etc."
                             />
                         </div>
@@ -757,7 +752,7 @@ export const ReservationsManagement: React.FC = () => {
                             type="submit"
                             disabled={createMutation.isPending || updateMutation.isPending}
                             className="flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all disabled:opacity-50"
-                            style={{ background: theme.primaryGradient }}
+                            style={{ background: THEME.primaryGradient }}
                         >
                             {isEditModalOpen ? 'Save Changes' : 'Create Reservation'}
                         </button>
@@ -787,7 +782,7 @@ export const ReservationsManagement: React.FC = () => {
                                 value={suggestParams.time}
                                 onChange={e => setSuggestParams({ ...suggestParams, time: e.target.value })}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                                style={{ outlineColor: theme.primary }}
+                                style={{ outlineColor: THEME.primary }}
                             />
                         </div>
                         <div>
@@ -799,7 +794,7 @@ export const ReservationsManagement: React.FC = () => {
                                 value={suggestParams.party_size}
                                 onChange={e => setSuggestParams({ ...suggestParams, party_size: parseInt(e.target.value) })}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                                style={{ outlineColor: theme.primary }}
+                                style={{ outlineColor: THEME.primary }}
                             />
                         </div>
                         <div>
@@ -812,7 +807,7 @@ export const ReservationsManagement: React.FC = () => {
                                 value={suggestParams.duration}
                                 onChange={e => setSuggestParams({ ...suggestParams, duration: parseInt(e.target.value) })}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                                style={{ outlineColor: theme.primary }}
+                                style={{ outlineColor: THEME.primary }}
                             />
                         </div>
                     </div>
@@ -821,7 +816,7 @@ export const ReservationsManagement: React.FC = () => {
                         type="submit"
                         disabled={isSuggestLoading || !suggestParams.time}
                         className="w-full mt-2 flex justify-center items-center gap-2 px-4 py-2 rounded-lg text-white font-medium disabled:opacity-50 transition-all"
-                        style={{ background: theme.primaryGradient }}
+                        style={{ background: THEME.primaryGradient }}
                     >
                         {isSuggestLoading ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Wand2 className="w-5 h-5" />}
                         {isSuggestLoading ? 'Calculating...' : 'Find Table'}
@@ -923,7 +918,7 @@ export const ReservationsManagement: React.FC = () => {
                                     handleOpenEdit(activeReservation);
                                 }}
                                 className="flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all"
-                                style={{ background: theme.primaryGradient }}
+                                style={{ background: THEME.primaryGradient }}
                             >
                                 <Edit2 className="w-4 h-4 inline mr-2" />
                                 Edit Reservation

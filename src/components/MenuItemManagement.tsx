@@ -33,6 +33,7 @@ import {
 } from '../hooks/useApi';
 import { usePermission } from '../hooks/usePermission';
 import { Permission } from '../auth/permissions';
+import { THEME } from '../constants';
 
 const Modal: React.FC<{
     isOpen: boolean;
@@ -103,12 +104,6 @@ const Modal: React.FC<{
 
 export const MenuItemManagement: React.FC = () => {
     const { hasPermission } = usePermission();
-    const theme = {
-        primary: '#2596be',
-        primaryLight: '#2596be15',
-        primaryDark: '#1a7a9e',
-        primaryGradient: 'linear-gradient(135deg, #2596be, #1a7a9e)'
-    };
 
     // View State
     const [viewMode, setViewMode] = useState<'grid' | 'table' | 'kanban'>('grid');
@@ -242,7 +237,7 @@ export const MenuItemManagement: React.FC = () => {
             <div className="flex items-center justify-between flex-wrap gap-4">
                 <div>
                     <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                        <UtensilsCrossed className="w-6 h-6" style={{ color: theme.primary }} />
+                        <UtensilsCrossed className="w-6 h-6" style={{ color: THEME.primary }} />
                         Menu Inventory
                     </h2>
                     <p className="text-sm text-slate-500 mt-1">Configure dishes, beverages, pricing, and availability</p>
@@ -258,14 +253,14 @@ export const MenuItemManagement: React.FC = () => {
                                 setIsCreateModalOpen(true);
                             }}
                             className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 shadow-lg"
-                            style={{ background: theme.primaryGradient, boxShadow: `0 4px 12px ${theme.primary}44` }}
+                            style={{ background: THEME.primaryGradient, boxShadow: `0 4px 12px ${THEME.primary}44` }}
                             onMouseEnter={(e) => {
                                 e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = `0 8px 20px ${theme.primary}55`;
+                                e.currentTarget.style.boxShadow = `0 8px 20px ${THEME.primary}55`;
                             }}
                             onMouseLeave={(e) => {
                                 e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = `0 4px 12px ${theme.primary}44`;
+                                e.currentTarget.style.boxShadow = `0 4px 12px ${THEME.primary}44`;
                             }}
                         >
                             <Plus className="w-4 h-4" />
@@ -318,14 +313,14 @@ export const MenuItemManagement: React.FC = () => {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all"
-                            style={{ outlineColor: theme.primary }}
+                            style={{ outlineColor: THEME.primary }}
                         />
                     </div>
                     <select
                         value={filterCategory}
                         onChange={(e) => setFilterCategory(e.target.value)}
                         className="px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all"
-                        style={{ outlineColor: theme.primary }}
+                        style={{ outlineColor: THEME.primary }}
                     >
                         <option value="all">All Categories</option>
                         {categoriesData?.results?.map((cat: any) => (
@@ -336,7 +331,7 @@ export const MenuItemManagement: React.FC = () => {
                         value={filterStatus}
                         onChange={(e) => setFilterStatus(e.target.value as any)}
                         className="px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all"
-                        style={{ outlineColor: theme.primary }}
+                        style={{ outlineColor: THEME.primary }}
                     >
                         <option value="all">All Status</option>
                         <option value="available">Available</option>
@@ -599,7 +594,7 @@ export const MenuItemManagement: React.FC = () => {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                            style={{ outlineColor: theme.primary }}
+                            style={{ outlineColor: THEME.primary }}
                             placeholder="e.g., Grilled Salmon"
                             required
                         />
@@ -611,7 +606,7 @@ export const MenuItemManagement: React.FC = () => {
                                 value={categoryId}
                                 onChange={(e) => setCategoryId(e.target.value)}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all bg-white"
-                                style={{ outlineColor: theme.primary }}
+                                style={{ outlineColor: THEME.primary }}
                                 required
                             >
                                 <option value="">Select Category</option>
@@ -630,7 +625,7 @@ export const MenuItemManagement: React.FC = () => {
                                     value={price}
                                     onChange={(e) => setPrice(e.target.value)}
                                     className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                                    style={{ outlineColor: theme.primary }}
+                                    style={{ outlineColor: THEME.primary }}
                                     required
                                 />
                             </div>
@@ -643,7 +638,7 @@ export const MenuItemManagement: React.FC = () => {
                             onChange={(e) => setDescription(e.target.value)}
                             rows={2}
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                            style={{ outlineColor: theme.primary }}
+                            style={{ outlineColor: THEME.primary }}
                             placeholder="Brief description of the item"
                         />
                     </div>
@@ -654,7 +649,7 @@ export const MenuItemManagement: React.FC = () => {
                                 value={status}
                                 onChange={(e) => setStatus(e.target.value as any)}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all bg-white"
-                                style={{ outlineColor: theme.primary }}
+                                style={{ outlineColor: THEME.primary }}
                             >
                                 <option value="available">Available</option>
                                 <option value="soldout">Sold Out</option>
@@ -667,7 +662,7 @@ export const MenuItemManagement: React.FC = () => {
                                     checked={isPopular}
                                     onChange={(e) => setIsPopular(e.target.checked)}
                                     className="w-4 h-4 rounded focus:ring-2"
-                                    style={{ accentColor: theme.primary }}
+                                    style={{ accentColor: THEME.primary }}
                                 />
                                 <span className="text-sm font-medium text-slate-700 flex items-center gap-1">
                                     <Star className="w-4 h-4 text-amber-500" />
@@ -688,7 +683,7 @@ export const MenuItemManagement: React.FC = () => {
                             type="submit"
                             disabled={createItemMutation.isPending}
                             className="flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all disabled:opacity-50"
-                            style={{ background: theme.primaryGradient }}
+                            style={{ background: THEME.primaryGradient }}
                         >
                             {createItemMutation.isPending ? 'Adding...' : 'Add Item'}
                         </button>
@@ -706,7 +701,7 @@ export const MenuItemManagement: React.FC = () => {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                            style={{ outlineColor: theme.primary }}
+                            style={{ outlineColor: THEME.primary }}
                             required
                         />
                     </div>
@@ -717,7 +712,7 @@ export const MenuItemManagement: React.FC = () => {
                                 value={categoryId}
                                 onChange={(e) => setCategoryId(e.target.value)}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all bg-white"
-                                style={{ outlineColor: theme.primary }}
+                                style={{ outlineColor: THEME.primary }}
                                 required
                             >
                                 <option value="">Select Category</option>
@@ -735,7 +730,7 @@ export const MenuItemManagement: React.FC = () => {
                                     value={price}
                                     onChange={(e) => setPrice(e.target.value)}
                                     className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                                    style={{ outlineColor: theme.primary }}
+                                    style={{ outlineColor: THEME.primary }}
                                     required
                                 />
                             </div>
@@ -748,7 +743,7 @@ export const MenuItemManagement: React.FC = () => {
                             onChange={(e) => setDescription(e.target.value)}
                             rows={2}
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                            style={{ outlineColor: theme.primary }}
+                            style={{ outlineColor: THEME.primary }}
                         />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
@@ -758,7 +753,7 @@ export const MenuItemManagement: React.FC = () => {
                                 value={status}
                                 onChange={(e) => setStatus(e.target.value as any)}
                                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all bg-white"
-                                style={{ outlineColor: theme.primary }}
+                                style={{ outlineColor: THEME.primary }}
                             >
                                 <option value="available">Available</option>
                                 <option value="soldout">Sold Out</option>
@@ -771,7 +766,7 @@ export const MenuItemManagement: React.FC = () => {
                                     checked={isPopular}
                                     onChange={(e) => setIsPopular(e.target.checked)}
                                     className="w-4 h-4 rounded focus:ring-2"
-                                    style={{ accentColor: theme.primary }}
+                                    style={{ accentColor: THEME.primary }}
                                 />
                                 <span className="text-sm font-medium text-slate-700 flex items-center gap-1">
                                     <Star className="w-4 h-4 text-amber-500" />
@@ -792,7 +787,7 @@ export const MenuItemManagement: React.FC = () => {
                             type="submit"
                             disabled={updateItemMutation.isPending}
                             className="flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all disabled:opacity-50"
-                            style={{ background: theme.primaryGradient }}
+                            style={{ background: THEME.primaryGradient }}
                         >
                             {updateItemMutation.isPending ? 'Saving...' : 'Save Changes'}
                         </button>

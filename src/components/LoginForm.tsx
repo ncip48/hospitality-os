@@ -11,6 +11,7 @@ import {
     Shield
 } from 'lucide-react';
 import { useLogin } from '../hooks/useApi';
+import { THEME } from '../constants';
 
 export const LoginForm: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -18,13 +19,6 @@ export const LoginForm: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isFocused, setIsFocused] = useState<'username' | 'password' | null>(null);
     const loginMutation = useLogin();
-
-    const theme = {
-        primary: '#2596be',
-        primaryLight: '#2596be15',
-        primaryDark: '#1a7a9e',
-        primaryGradient: 'linear-gradient(135deg, #2596be, #1a7a9e)'
-    };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -46,21 +40,21 @@ export const LoginForm: React.FC = () => {
                 <div
                     className="absolute -top-40 -right-40 w-96 h-96 rounded-full opacity-10"
                     style={{
-                        background: `radial-gradient(circle, ${theme.primary} 0%, transparent 70%)`,
+                        background: `radial-gradient(circle, ${THEME.primary} 0%, transparent 70%)`,
                         animation: 'float 20s ease-in-out infinite'
                     }}
                 />
                 <div
                     className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full opacity-5"
                     style={{
-                        background: `radial-gradient(circle, ${theme.primary} 0%, transparent 70%)`,
+                        background: `radial-gradient(circle, ${THEME.primary} 0%, transparent 70%)`,
                         animation: 'float 25s ease-in-out infinite reverse'
                     }}
                 />
                 <div
                     className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-[0.02]"
                     style={{
-                        background: `radial-gradient(circle, ${theme.primary} 0%, transparent 70%)`,
+                        background: `radial-gradient(circle, ${THEME.primary} 0%, transparent 70%)`,
                     }}
                 />
             </div>
@@ -71,8 +65,8 @@ export const LoginForm: React.FC = () => {
                     {/* Logo & Brand */}
                     <div className="text-center mb-8">
                         <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl shadow-lg mb-4" style={{
-                            background: theme.primaryGradient,
-                            boxShadow: `0 8px 24px ${theme.primary}55`
+                            background: THEME.primaryGradient,
+                            boxShadow: `0 8px 24px ${THEME.primary}55`
                         }}>
                             <Building2 className="w-8 h-8 text-white" />
                         </div>
@@ -130,8 +124,8 @@ export const LoginForm: React.FC = () => {
                                     required
                                     className="w-full pl-10 pr-3 py-3 bg-slate-50 border rounded-xl text-slate-900 placeholder:text-slate-400 transition-all duration-200 focus:outline-none focus:ring-2"
                                     style={{
-                                        borderColor: isFocused === 'username' ? theme.primary : '#e2e8f0',
-                                        boxShadow: isFocused === 'username' ? `0 0 0 4px ${theme.primary}22` : 'none',
+                                        borderColor: isFocused === 'username' ? THEME.primary : '#e2e8f0',
+                                        boxShadow: isFocused === 'username' ? `0 0 0 4px ${THEME.primary}22` : 'none',
                                         backgroundColor: isFocused === 'username' ? '#fff' : '#f8fafc'
                                     }}
                                 />
@@ -166,8 +160,8 @@ export const LoginForm: React.FC = () => {
                                     required
                                     className="w-full pl-10 pr-12 py-3 bg-slate-50 border rounded-xl text-slate-900 placeholder:text-slate-400 transition-all duration-200 focus:outline-none focus:ring-2"
                                     style={{
-                                        borderColor: isFocused === 'password' ? theme.primary : '#e2e8f0',
-                                        boxShadow: isFocused === 'password' ? `0 0 0 4px ${theme.primary}22` : 'none',
+                                        borderColor: isFocused === 'password' ? THEME.primary : '#e2e8f0',
+                                        boxShadow: isFocused === 'password' ? `0 0 0 4px ${THEME.primary}22` : 'none',
                                         backgroundColor: isFocused === 'password' ? '#fff' : '#f8fafc'
                                     }}
                                 />
@@ -191,18 +185,18 @@ export const LoginForm: React.FC = () => {
                             disabled={loginMutation.isPending}
                             className="w-full py-3 rounded-xl text-white font-medium transition-all duration-200 relative overflow-hidden group disabled:opacity-60 disabled:cursor-not-allowed"
                             style={{
-                                background: theme.primaryGradient,
-                                boxShadow: `0 4px 16px ${theme.primary}55`
+                                background: THEME.primaryGradient,
+                                boxShadow: `0 4px 16px ${THEME.primary}55`
                             }}
                             onMouseEnter={(e) => {
                                 if (!loginMutation.isPending) {
                                     e.currentTarget.style.transform = 'translateY(-2px)';
-                                    e.currentTarget.style.boxShadow = `0 8px 24px ${theme.primary}66`;
+                                    e.currentTarget.style.boxShadow = `0 8px 24px ${THEME.primary}66`;
                                 }
                             }}
                             onMouseLeave={(e) => {
                                 e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = `0 4px 16px ${theme.primary}55`;
+                                e.currentTarget.style.boxShadow = `0 4px 16px ${THEME.primary}55`;
                             }}
                         >
                             {loginMutation.isPending ? (

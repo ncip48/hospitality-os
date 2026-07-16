@@ -25,6 +25,7 @@ import {
 import { useRolesList, useCreateRole, useDeleteRole, useRoleAudit, useUpdateRole } from '../hooks/useApi';
 import { Permission } from '../auth/permissions';
 import { usePermission } from '../hooks/usePermission';
+import { THEME } from '../constants';
 
 // Modal Component
 const Modal: React.FC<{
@@ -205,9 +206,6 @@ const RoleCard: React.FC<{
     onDelete: () => void;
     onAudit: () => void;
 }> = ({ role, onEdit, onDelete, onAudit }) => {
-    const theme = {
-        primary: '#2596be'
-    };
 
     const getScopeIcon = (isKioskOnly: boolean) => {
         return isKioskOnly ? <Monitor className="w-4 h-4" /> : <Globe className="w-4 h-4" />;
@@ -227,16 +225,16 @@ const RoleCard: React.FC<{
     return (
         <div className="bg-white rounded-xl border border-slate-200 hover:border-[#2596be]/30 hover:shadow-lg transition-all duration-200 group overflow-hidden">
             {/* Color Bar */}
-            <div className="h-1" style={{ backgroundColor: role.color || theme.primary }} />
+            <div className="h-1" style={{ backgroundColor: role.color || THEME.primary }} />
 
             <div className="p-5">
                 <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
                         <div
                             className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                            style={{ backgroundColor: `${role.color || theme.primary}22` }}
+                            style={{ backgroundColor: `${role.color || THEME.primary}22` }}
                         >
-                            <Shield className="w-5 h-5" style={{ color: role.color || theme.primary }} />
+                            <Shield className="w-5 h-5" style={{ color: role.color || THEME.primary }} />
                         </div>
                         <div>
                             <h4 className="font-bold text-slate-900 flex items-center gap-2">
@@ -343,11 +341,6 @@ const PermissionBadge: React.FC<{ permission: string }> = ({ permission }) => {
 };
 
 export const RolesManagement: React.FC = () => {
-    const theme = {
-        primary: '#2596be',
-        primaryLight: '#2596be15',
-        primaryDark: '#1a7a9e'
-    };
 
     // View State
     const [viewMode, setViewMode] = useState<'grid' | 'compact'>('grid');
@@ -455,7 +448,7 @@ export const RolesManagement: React.FC = () => {
             <div className="flex items-center justify-between flex-wrap gap-4">
                 <div>
                     <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                        <Shield className="w-6 h-6" style={{ color: theme.primary }} />
+                        <Shield className="w-6 h-6" style={{ color: THEME.primary }} />
                         System Access Roles
                     </h2>
                     <p className="text-sm text-slate-500 mt-1">
@@ -486,16 +479,16 @@ export const RolesManagement: React.FC = () => {
                             onClick={() => setIsCreateModalOpen(true)}
                             className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 shadow-lg"
                             style={{
-                                background: `linear-gradient(135deg, ${theme.primary}, ${theme.primaryDark})`,
-                                boxShadow: `0 4px 12px ${theme.primary}44`
+                                background: `linear-gradient(135deg, ${THEME.primary}, ${THEME.primaryDark})`,
+                                boxShadow: `0 4px 12px ${THEME.primary}44`
                             }}
                             onMouseEnter={(e) => {
                                 e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = `0 8px 20px ${theme.primary}55`;
+                                e.currentTarget.style.boxShadow = `0 8px 20px ${THEME.primary}55`;
                             }}
                             onMouseLeave={(e) => {
                                 e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = `0 4px 12px ${theme.primary}44`;
+                                e.currentTarget.style.boxShadow = `0 4px 12px ${THEME.primary}44`;
                             }}
                         >
                             <Plus className="w-4 h-4" />
@@ -574,7 +567,7 @@ export const RolesManagement: React.FC = () => {
                                 <div className="flex items-center gap-4 flex-1 min-w-0">
                                     <div
                                         className="w-3 h-10 rounded-full flex-shrink-0"
-                                        style={{ backgroundColor: role.color || theme.primary }}
+                                        style={{ backgroundColor: role.color || THEME.primary }}
                                     />
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2">
@@ -655,7 +648,7 @@ export const RolesManagement: React.FC = () => {
                 <div className="fixed right-0 top-0 h-full w-[480px] bg-white shadow-2xl border-l border-slate-200 z-40 animate-in slide-in-from-right duration-400 overflow-y-auto">
                     <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-slate-200 px-6 py-4 flex items-center justify-between z-10">
                         <h3 className="font-bold text-slate-900 flex items-center gap-2">
-                            <History className="w-5 h-5" style={{ color: theme.primary }} />
+                            <History className="w-5 h-5" style={{ color: THEME.primary }} />
                             Audit Log
                             {selectedRoleForAudit && (
                                 <span className="text-sm font-normal text-slate-500">
@@ -725,7 +718,7 @@ export const RolesManagement: React.FC = () => {
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="e.g., Manager, Supervisor"
                                 className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-shadow"
-                                style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
+                                style={{ borderColor: '#e2e8f0', outlineColor: THEME.primary }}
                                 required
                             />
                         </div>
@@ -771,8 +764,8 @@ export const RolesManagement: React.FC = () => {
                             disabled={createMutation.isPending}
                             className="flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                             style={{
-                                background: `linear-gradient(135deg, ${theme.primary}, ${theme.primaryDark})`,
-                                boxShadow: `0 2px 8px ${theme.primary}44`
+                                background: `linear-gradient(135deg, ${THEME.primary}, ${THEME.primaryDark})`,
+                                boxShadow: `0 2px 8px ${THEME.primary}44`
                             }}
                         >
                             {createMutation.isPending ? (
@@ -801,7 +794,7 @@ export const RolesManagement: React.FC = () => {
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="e.g., Manager, Supervisor"
                                 className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-shadow"
-                                style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
+                                style={{ borderColor: '#e2e8f0', outlineColor: THEME.primary }}
                                 required
                             />
                         </div>
@@ -830,7 +823,7 @@ export const RolesManagement: React.FC = () => {
                                 onChange={(e) => setPermissions(e.target.value)}
                                 placeholder="e.g., view_dashboard, edit_menu, manage_users"
                                 className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-shadow"
-                                style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
+                                style={{ borderColor: '#e2e8f0', outlineColor: THEME.primary }}
                             />
                         </div>
                         <p className="text-xs text-slate-400 mt-1">Separate permissions with commas</p>
@@ -870,8 +863,8 @@ export const RolesManagement: React.FC = () => {
                             disabled={updateMutation.isPending}
                             className="flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                             style={{
-                                background: `linear-gradient(135deg, ${theme.primary}, ${theme.primaryDark})`,
-                                boxShadow: `0 2px 8px ${theme.primary}44`
+                                background: `linear-gradient(135deg, ${THEME.primary}, ${THEME.primaryDark})`,
+                                boxShadow: `0 2px 8px ${THEME.primary}44`
                             }}
                         >
                             {updateMutation.isPending ? (

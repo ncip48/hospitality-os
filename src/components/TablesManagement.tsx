@@ -34,6 +34,7 @@ import {
 import { usePermission } from '../hooks/usePermission';
 import { Permission } from '../auth/permissions';
 import type { Table } from '../api/types';
+import { THEME } from '../constants';
 
 // Modal Component
 const Modal: React.FC<{
@@ -105,12 +106,6 @@ const Modal: React.FC<{
 
 export const TablesManagement: React.FC = () => {
     const { hasPermission } = usePermission();
-    const theme = {
-        primary: '#2596be',
-        primaryLight: '#2596be15',
-        primaryDark: '#1a7a9e',
-        primaryGradient: 'linear-gradient(135deg, #2596be, #1a7a9e)'
-    };
 
     // View State
     const [viewMode, setViewMode] = useState<'table' | 'grid'>('grid');
@@ -252,7 +247,7 @@ export const TablesManagement: React.FC = () => {
             <div className="flex items-center justify-between flex-wrap gap-4">
                 <div>
                     <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                        <Grid className="w-6 h-6" style={{ color: theme.primary }} />
+                        <Grid className="w-6 h-6" style={{ color: THEME.primary }} />
                         Table Management
                     </h2>
                     <p className="text-sm text-slate-500 mt-1">Manage restaurant seating, walk-ins, and tablet pairing</p>
@@ -265,14 +260,14 @@ export const TablesManagement: React.FC = () => {
                         <button
                             onClick={() => { setLabel(''); setSeats(2); setIsActive(true); setIsCreateModalOpen(true); }}
                             className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 shadow-lg"
-                            style={{ background: theme.primaryGradient, boxShadow: `0 4px 12px ${theme.primary}44` }}
+                            style={{ background: THEME.primaryGradient, boxShadow: `0 4px 12px ${THEME.primary}44` }}
                             onMouseEnter={(e) => {
                                 e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = `0 8px 20px ${theme.primary}55`;
+                                e.currentTarget.style.boxShadow = `0 8px 20px ${THEME.primary}55`;
                             }}
                             onMouseLeave={(e) => {
                                 e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = `0 4px 12px ${theme.primary}44`;
+                                e.currentTarget.style.boxShadow = `0 4px 12px ${THEME.primary}44`;
                             }}
                         >
                             <Plus className="w-4 h-4" />
@@ -333,14 +328,14 @@ export const TablesManagement: React.FC = () => {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all"
-                            style={{ outlineColor: theme.primary }}
+                            style={{ outlineColor: THEME.primary }}
                         />
                     </div>
                     <select
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value as any)}
                         className="px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all"
-                        style={{ outlineColor: theme.primary }}
+                        style={{ outlineColor: THEME.primary }}
                     >
                         <option value="all">All Status</option>
                         <option value="free">Free</option>
@@ -562,7 +557,7 @@ export const TablesManagement: React.FC = () => {
                             onChange={(e) => setLabel(e.target.value)}
                             placeholder="e.g., T-01, VIP-1"
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                            style={{ outlineColor: theme.primary }}
+                            style={{ outlineColor: THEME.primary }}
                             required
                         />
                     </div>
@@ -574,7 +569,7 @@ export const TablesManagement: React.FC = () => {
                             value={seats}
                             onChange={(e) => setSeats(Number(e.target.value))}
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                            style={{ outlineColor: theme.primary }}
+                            style={{ outlineColor: THEME.primary }}
                             required
                         />
                     </div>
@@ -584,13 +579,13 @@ export const TablesManagement: React.FC = () => {
                             checked={isActive}
                             onChange={(e) => setIsActive(e.target.checked)}
                             className="w-4 h-4 rounded focus:ring-2"
-                            style={{ accentColor: theme.primary }}
+                            style={{ accentColor: THEME.primary }}
                         />
                         <span className="text-sm font-medium text-slate-700">Table is Active (Available for seating)</span>
                     </label>
                     <div className="flex gap-3 pt-2">
                         <button type="button" onClick={() => setIsCreateModalOpen(false)} className="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50 transition-colors">Cancel</button>
-                        <button type="submit" disabled={createTableMutation.isPending} className="flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all disabled:opacity-50" style={{ background: theme.primaryGradient }}>
+                        <button type="submit" disabled={createTableMutation.isPending} className="flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all disabled:opacity-50" style={{ background: THEME.primaryGradient }}>
                             {createTableMutation.isPending ? 'Creating...' : 'Create Table'}
                         </button>
                     </div>
@@ -608,7 +603,7 @@ export const TablesManagement: React.FC = () => {
                             value={label}
                             onChange={(e) => setLabel(e.target.value)}
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                            style={{ outlineColor: theme.primary }}
+                            style={{ outlineColor: THEME.primary }}
                             required
                         />
                     </div>
@@ -620,13 +615,13 @@ export const TablesManagement: React.FC = () => {
                             value={seats}
                             onChange={(e) => setSeats(Number(e.target.value))}
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                            style={{ outlineColor: theme.primary }}
+                            style={{ outlineColor: THEME.primary }}
                             required
                         />
                     </div>
                     <div className="flex gap-3 pt-2">
                         <button type="button" onClick={() => setIsEditModalOpen(false)} className="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50 transition-colors">Cancel</button>
-                        <button type="submit" disabled={updateTableMutation.isPending} className="flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all disabled:opacity-50" style={{ background: theme.primaryGradient }}>
+                        <button type="submit" disabled={updateTableMutation.isPending} className="flex-1 px-4 py-2 rounded-lg text-white font-medium transition-all disabled:opacity-50" style={{ background: THEME.primaryGradient }}>
                             {updateTableMutation.isPending ? 'Updating...' : 'Update Table'}
                         </button>
                     </div>
@@ -644,7 +639,7 @@ export const TablesManagement: React.FC = () => {
                             value={walkinGuests}
                             onChange={(e) => setWalkinGuests(Number(e.target.value))}
                             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-all"
-                            style={{ outlineColor: theme.primary }}
+                            style={{ outlineColor: THEME.primary }}
                             required
                         />
                         <p className="text-xs text-slate-500 mt-1">This table has a physical capacity of {editingTable?.seats} seats.</p>
@@ -706,13 +701,13 @@ export const TablesManagement: React.FC = () => {
                                     placeholder="e.g., A1B2C3"
                                     maxLength={6}
                                     className="w-full px-3 py-3 text-center tracking-widest text-lg font-bold border border-slate-300 rounded-lg focus:outline-none focus:ring-2 uppercase transition-all"
-                                    style={{ outlineColor: theme.primary }}
+                                    style={{ outlineColor: THEME.primary }}
                                     required
                                 />
                             </div>
                             <div className="flex gap-3 pt-4">
                                 <button type="button" onClick={() => setIsPairingModalOpen(false)} className="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50 transition-colors">Cancel</button>
-                                <button type="submit" disabled={!pairingCode || confirmPairingMutation.isPending} className="flex-1 flex justify-center items-center gap-2 px-4 py-2 rounded-lg text-white font-medium disabled:opacity-50 transition-all" style={{ background: theme.primaryGradient }}>
+                                <button type="submit" disabled={!pairingCode || confirmPairingMutation.isPending} className="flex-1 flex justify-center items-center gap-2 px-4 py-2 rounded-lg text-white font-medium disabled:opacity-50 transition-all" style={{ background: THEME.primaryGradient }}>
                                     <LinkIcon className="w-4 h-4" /> Link Tablet
                                 </button>
                             </div>

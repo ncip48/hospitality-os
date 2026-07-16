@@ -18,6 +18,7 @@ import {
 import { useKioskClock, useMatchFace, useVenueLocation } from '../hooks/useApi';
 // Import the Liveness SDK
 import { LivenessComponent } from 'pv-liveness-sdk';
+import { THEME } from '../constants';
 
 // 1. Isolated SDK wrapper to guard against parent clock ticks re-rendering the SDK session
 const StableLivenessWrapper: React.FC<{
@@ -86,12 +87,6 @@ const Notification: React.FC<{
 };
 
 export const KioskClock: React.FC = () => {
-    const theme = {
-        primary: '#2596be',
-        primaryLight: '#2596be15',
-        primaryDark: '#1a7a9e',
-        primaryGradient: 'linear-gradient(135deg, #2596be, #1a7a9e)'
-    };
 
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -370,7 +365,7 @@ export const KioskClock: React.FC = () => {
                         <div className="flex items-center justify-between mb-6">
                             <div>
                                 <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                                    <Clock className="w-6 h-6" style={{ color: theme.primary }} />
+                                    <Clock className="w-6 h-6" style={{ color: THEME.primary }} />
                                     Attendance Kiosk
                                 </h1>
                                 <p className="text-sm text-slate-500 mt-1">
