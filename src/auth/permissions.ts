@@ -17,6 +17,11 @@ export const Permission = {
     MENU_CREATE: 'menu:create',
     MENU_UPDATE: 'menu:edit',
     MENU_DELETE: 'menu:delete',
+
+    TABLE_VIEW: 'table:view',
+    TABLE_CREATE: 'table:create',
+    TABLE_UPDATE: 'table:edit',
+    TABLE_DELETE: 'table:delete',
 } as const;
 
 export type Permission =

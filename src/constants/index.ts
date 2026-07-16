@@ -5,7 +5,9 @@ import {
     Users,
     Shield,
     FolderKanban,
-    UtensilsCrossed
+    UtensilsCrossed,
+    LayoutGrid,
+    CalendarDays
 } from 'lucide-react';
 import { Permission } from '../auth/permissions';
 
@@ -60,6 +62,18 @@ export const NAV_ITEMS = [
         label: 'Menu Items',
         permission: Permission.MENU_VIEW,
     },
+    {
+        path: '/tables',
+        icon: LayoutGrid,
+        label: 'Tables',
+        permission: Permission.TABLE_VIEW,
+    },
+    {
+        path: '/reservations',
+        icon: CalendarDays,
+        label: 'Reservations',
+        permission: Permission.TABLE_VIEW, // Assuming you have this permission
+    }
 ] as const;
 
 export const PAGE_DESCRIPTIONS: Record<string, string> = {

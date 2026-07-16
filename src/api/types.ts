@@ -172,3 +172,92 @@ export interface PaginatedMenuItemList {
     previous: string | null;
     results: MenuItem[];
 }
+
+// ==========================================
+// 6. Tables & Seating Types
+// ==========================================
+export type TableStatusEnum = 'free' | 'seated' | 'ordered' | 'bill' | 'reserved';
+export type AccessMethodEnum = 'tablet' | 'qr';
+
+export interface Table {
+    pk: string;
+    label: string;
+    seats: number;
+    status: TableStatusEnum;
+    is_active: boolean;
+    access_method: AccessMethodEnum;
+    current_guests: number;
+    seated_since: string | null;
+}
+
+export interface TableRequest {
+    label: string;
+    seats: number;
+    is_active?: boolean;
+}
+
+export interface PaginatedTableList {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: Table[];
+}
+
+export interface PairingConfirmRequest {
+    code: string;
+}
+
+export interface SeatWalkinRequest {
+    guests?: number; // Defaults to 1 if omitted
+}
+
+// --- Reservations Types ---
+export type ReservationStatus =
+    | 'pending'
+    | 'confirmed'
+    | 'waitlist'
+    | 'seated'
+    | 'no_show'
+    | 'cancelled'
+    | 'declined'
+    | 'completed';
+
+export type ReservationSource = 'website' | 'whatsapp' | 'phone' | 'walkin';
+
+export interface Reservation {
+    pk: string;
+    guest_name: string;
+    phone?: string;
+    party_size: number;
+    time: string; // ISO date-time
+    duration_minutes: number;
+    status: ReservationStatus;
+    source: ReservationSource;
+    assigned_table: Table;
+    notes?: string;
+    created_at: string; // ISO date-time
+}
+
+export interface ReservationRequest {
+    guest_name: string;
+    phone?: string;
+    party_size: number;
+    time: string; // ISO date-time
+    duration_minutes?: number;
+    source: ReservationSource;
+    assigned_table_id?: string | null;
+    notes?: string;
+}
+
+export interface PaginatedReservationList {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: Reservation[];
+}
+
+export interface SuggestTableParams {
+    time: string; // ISO-8601
+    duration?: number;
+    party_size?: number;
+}

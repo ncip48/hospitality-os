@@ -24,7 +24,31 @@ import {
     getMenuCategories,
     getMenuItems,
     updateMenuCategory,
-    updateMenuItem
+    updateMenuItem,
+    confirmTablePairing,
+    createTable,
+    deleteTable,
+    deleteTablePairing,
+    getTable,
+    getTableQr,
+    getTablesList,
+    requestTablePairingCode,
+    seatWalkinGuests,
+    toggleTableActiveStatus,
+    updateTable,
+    approveReservation,
+    closeBillReservation,
+    createReservation,
+    declineReservation,
+    deleteReservation,
+    getReservation,
+    getReservationsList,
+    noShowReservation,
+    promoteReservation,
+    seatReservation,
+    suggestTable,
+    updateReservation,
+    waitlistReservation
 } from '../api/client';
 import type {
     LoginRequest, KioskEnrollRequest, KioskMatchFaceRequest,
@@ -32,7 +56,12 @@ import type {
     RoleRequest,
     StaffRequest,
     MenuItemRequest,
-    MenuCategoryRequest
+    MenuCategoryRequest,
+    PairingConfirmRequest,
+    SeatWalkinRequest,
+    TableRequest,
+    ReservationRequest,
+    SuggestTableParams
 } from '../api/types';
 
 export const useLogin = () => {
@@ -267,3 +296,228 @@ export const useDeleteMenuItem = () => {
         },
     });
 };
+
+// --- Tables CRUD Hooks ---
+export const useTablesList = (page = 1) => useQuery({
+    queryKey: ['tablesList', page],
+    queryFn: () => getTablesList(page)
+});
+
+export const useTableDetail = (subid: string, enabled = true) => useQuery({
+    queryKey: ['tableDetail', subid],
+    queryFn: () => getTable(subid),
+    enabled,
+});
+
+export const useCreateTable = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: TableRequest) => createTable(data),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tablesList'] }),
+    });
+};
+
+export const useUpdateTable = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ subid, data }: { subid: string, data: TableRequest }) => updateTable(subid, data),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['tablesList'] });
+            queryClient.invalidateQueries({ queryKey: ['tableDetail', variables.subid] });
+        },
+    });
+};
+
+export const useDeleteTable = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (subid: string) => deleteTable(subid),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tablesList'] }),
+    });
+};
+
+// --- Tables Feature Hooks ---
+export const useDeleteTablePairing = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (subid: string) => deleteTablePairing(subid),
+        onSuccess: (_, subid) => {
+            queryClient.invalidateQueries({ queryKey: ['tablesList'] });
+            queryClient.invalidateQueries({ queryKey: ['tableDetail', subid] });
+        },
+    });
+};
+
+export const useConfirmTablePairing = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ subid, data }: { subid: string, data: PairingConfirmRequest }) => confirmTablePairing(subid, data),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['tablesList'] });
+            queryClient.invalidateQueries({ queryKey: ['tableDetail', variables.subid] });
+        },
+    });
+};
+
+export const useTableQr = (subid: string, enabled = false) => useQuery({
+    queryKey: ['tableQr', subid],
+    queryFn: () => getTableQr(subid),
+    enabled,
+});
+
+export const useSeatWalkinGuests = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ subid, data }: { subid: string, data: SeatWalkinRequest }) => seatWalkinGuests(subid, data),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['tablesList'] });
+            queryClient.invalidateQueries({ queryKey: ['tableDetail', variables.subid] });
+        },
+    });
+};
+
+export const useToggleTableActiveStatus = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (subid: string) => toggleTableActiveStatus(subid),
+        onSuccess: (_, subid) => {
+            queryClient.invalidateQueries({ queryKey: ['tablesList'] });
+            queryClient.invalidateQueries({ queryKey: ['tableDetail', subid] });
+        },
+    });
+};
+
+export const useRequestTablePairingCode = () => {
+    // Note: No invalidation needed for generating a code
+    return useMutation({
+        mutationFn: () => requestTablePairingCode(),
+    });
+};
+
+// --- Reservations CRUD Hooks ---
+export const useReservationsList = (page = 1, search = '') => useQuery({
+    queryKey: ['reservationsList', page, search],
+    queryFn: () => getReservationsList(page, search)
+});
+
+export const useReservationDetail = (subid: string, enabled = true) => useQuery({
+    queryKey: ['reservationDetail', subid],
+    queryFn: () => getReservation(subid),
+    enabled,
+});
+
+export const useCreateReservation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: ReservationRequest) => createReservation(data),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['reservationsList'] }),
+    });
+};
+
+export const useUpdateReservation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ subid, data }: { subid: string, data: Partial<ReservationRequest> }) => updateReservation(subid, data),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['reservationsList'] });
+            queryClient.invalidateQueries({ queryKey: ['reservationDetail', variables.subid] });
+        },
+    });
+};
+
+export const useDeleteReservation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (subid: string) => deleteReservation(subid),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['reservationsList'] }),
+    });
+};
+
+// --- Reservations Feature Hooks ---
+
+export const useApproveReservation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (subid: string) => approveReservation(subid),
+        onSuccess: (_, subid) => {
+            queryClient.invalidateQueries({ queryKey: ['reservationsList'] });
+            queryClient.invalidateQueries({ queryKey: ['reservationDetail', subid] });
+        },
+    });
+};
+
+export const useCloseBillReservation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (subid: string) => closeBillReservation(subid),
+        onSuccess: (_, subid) => {
+            queryClient.invalidateQueries({ queryKey: ['reservationsList'] });
+            queryClient.invalidateQueries({ queryKey: ['reservationDetail', subid] });
+            queryClient.invalidateQueries({ queryKey: ['tablesList'] }); // Table frees up
+        },
+    });
+};
+
+export const useDeclineReservation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (subid: string) => declineReservation(subid),
+        onSuccess: (_, subid) => {
+            queryClient.invalidateQueries({ queryKey: ['reservationsList'] });
+            queryClient.invalidateQueries({ queryKey: ['reservationDetail', subid] });
+        },
+    });
+};
+
+export const useNoShowReservation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (subid: string) => noShowReservation(subid),
+        onSuccess: (_, subid) => {
+            queryClient.invalidateQueries({ queryKey: ['reservationsList'] });
+            queryClient.invalidateQueries({ queryKey: ['reservationDetail', subid] });
+            queryClient.invalidateQueries({ queryKey: ['tablesList'] }); // Table frees up
+        },
+    });
+};
+
+export const usePromoteReservation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (subid: string) => promoteReservation(subid),
+        onSuccess: (_, subid) => {
+            queryClient.invalidateQueries({ queryKey: ['reservationsList'] });
+            queryClient.invalidateQueries({ queryKey: ['reservationDetail', subid] });
+        },
+    });
+};
+
+export const useSeatReservation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (subid: string) => seatReservation(subid),
+        onSuccess: (_, subid) => {
+            queryClient.invalidateQueries({ queryKey: ['reservationsList'] });
+            queryClient.invalidateQueries({ queryKey: ['reservationDetail', subid] });
+            queryClient.invalidateQueries({ queryKey: ['tablesList'] }); // Table status changes
+        },
+    });
+};
+
+export const useWaitlistReservation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (subid: string) => waitlistReservation(subid),
+        onSuccess: (_, subid) => {
+            queryClient.invalidateQueries({ queryKey: ['reservationsList'] });
+            queryClient.invalidateQueries({ queryKey: ['reservationDetail', subid] });
+        },
+    });
+};
+
+export const useSuggestTable = (params: SuggestTableParams, enabled = false) => useQuery({
+    queryKey: ['suggestTable', params],
+    queryFn: () => suggestTable(params),
+    enabled: enabled && !!params.time,
+    retry: false
+});

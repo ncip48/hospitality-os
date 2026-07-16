@@ -8,6 +8,8 @@ import { DashboardLayout } from './components/DashboardLayout';
 import { Dashboard } from './pages/Dashboard';
 import { MenuCategoryManagement } from './components/MenuCategoryManagement';
 import { MenuItemManagement } from './components/MenuItemManagement';
+import { TablesManagement } from './components/TablesManagement';
+import { ReservationsManagement } from './components/ReservationsManagement';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const token = localStorage.getItem('access_token');
@@ -29,6 +31,8 @@ function App() {
       <Route path="/roles" element={<PrivateRoute><RolesManagement /></PrivateRoute>} />
       <Route path="/menu-categories" element={<PrivateRoute><MenuCategoryManagement /></PrivateRoute>} />
       <Route path="/menu-items" element={<PrivateRoute><MenuItemManagement /></PrivateRoute>} />
+      <Route path="/tables" element={<PrivateRoute><TablesManagement /></PrivateRoute>} />
+      <Route path="/reservations" element={<PrivateRoute><ReservationsManagement /></PrivateRoute>} />
 
       {/* Fallback Catch-All Redirector */}
       <Route path="*" element={<Navigate to="/" replace />} />

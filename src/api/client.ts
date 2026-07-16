@@ -15,7 +15,16 @@ import type {
     MenuItem,
     MenuCategory,
     MenuItemRequest,
-    MenuCategoryRequest
+    MenuCategoryRequest,
+    PaginatedTableList,
+    PairingConfirmRequest,
+    SeatWalkinRequest,
+    Table,
+    TableRequest,
+    PaginatedReservationList,
+    Reservation,
+    ReservationRequest,
+    SuggestTableParams
 } from './types';
 
 export const apiClient = axios.create({
@@ -298,4 +307,125 @@ export const updateMenuItem = async (
 
 export const deleteMenuItem = async (pk: number | string): Promise<void> => {
     await apiClient.delete(`/api/menu/${pk}/`);
+};
+
+// --- Tables CRUD Operations ---
+export const getTablesList = async (page = 1): Promise<PaginatedTableList> => {
+    const response = await apiClient.get('/api/tables/', { params: { page } });
+    return response.data;
+};
+
+export const getTable = async (subid: string): Promise<Table> => {
+    const response = await apiClient.get(`/api/tables/${subid}/`);
+    return response.data;
+};
+
+export const createTable = async (data: TableRequest): Promise<Table> => {
+    const response = await apiClient.post('/api/tables/', data);
+    return response.data;
+};
+
+export const updateTable = async (subid: string, data: TableRequest): Promise<Table> => {
+    const response = await apiClient.patch(`/api/tables/${subid}/`, data);
+    return response.data;
+};
+
+export const deleteTable = async (subid: string): Promise<void> => {
+    await apiClient.delete(`/api/tables/${subid}/`);
+};
+
+// --- Tables Features Operations ---
+export const deleteTablePairing = async (subid: string): Promise<void> => {
+    await apiClient.delete(`/api/tables/${subid}/pairing/`);
+};
+
+export const confirmTablePairing = async (subid: string, data: PairingConfirmRequest): Promise<void> => {
+    await apiClient.post(`/api/tables/${subid}/pairing/confirm/`, data);
+};
+
+export const getTableQr = async (subid: string): Promise<Table> => {
+    const response = await apiClient.get(`/api/tables/${subid}/qr/`);
+    return response.data;
+};
+
+export const seatWalkinGuests = async (subid: string, data: SeatWalkinRequest): Promise<Table> => {
+    const response = await apiClient.post(`/api/tables/${subid}/seat-walkin/`, data);
+    return response.data;
+};
+
+export const toggleTableActiveStatus = async (subid: string): Promise<Table> => {
+    const response = await apiClient.patch(`/api/tables/${subid}/toggle-active/`);
+    return response.data;
+};
+
+export const requestTablePairingCode = async (): Promise<void> => {
+    await apiClient.post('/api/tables/pairing/request-code/');
+};
+
+// --- Reservations CRUD Operations ---
+export const getReservationsList = async (page = 1, search = ''): Promise<PaginatedReservationList> => {
+    const response = await apiClient.get('/api/reservations/', {
+        params: { page, ...(search && { search }) }
+    });
+    return response.data;
+};
+
+export const getReservation = async (subid: string): Promise<Reservation> => {
+    const response = await apiClient.get(`/api/reservations/${subid}/`);
+    return response.data;
+};
+
+export const createReservation = async (data: ReservationRequest): Promise<Reservation> => {
+    const response = await apiClient.post('/api/reservations/', data);
+    return response.data;
+};
+
+export const updateReservation = async (subid: string, data: Partial<ReservationRequest>): Promise<Reservation> => {
+    const response = await apiClient.patch(`/api/reservations/${subid}/`, data);
+    return response.data;
+};
+
+export const deleteReservation = async (subid: string): Promise<void> => {
+    await apiClient.delete(`/api/reservations/${subid}/`);
+};
+
+// --- Reservations Feature Operations ---
+export const approveReservation = async (subid: string): Promise<Reservation> => {
+    const response = await apiClient.post(`/api/reservations/${subid}/approve/`);
+    return response.data;
+};
+
+export const closeBillReservation = async (subid: string): Promise<Reservation> => {
+    const response = await apiClient.post(`/api/reservations/${subid}/close-bill/`);
+    return response.data;
+};
+
+export const declineReservation = async (subid: string): Promise<Reservation> => {
+    const response = await apiClient.post(`/api/reservations/${subid}/decline/`);
+    return response.data;
+};
+
+export const noShowReservation = async (subid: string): Promise<Reservation> => {
+    const response = await apiClient.post(`/api/reservations/${subid}/no-show/`);
+    return response.data;
+};
+
+export const promoteReservation = async (subid: string): Promise<Reservation> => {
+    const response = await apiClient.post(`/api/reservations/${subid}/promote/`);
+    return response.data;
+};
+
+export const seatReservation = async (subid: string): Promise<Reservation> => {
+    const response = await apiClient.post(`/api/reservations/${subid}/seat/`);
+    return response.data;
+};
+
+export const waitlistReservation = async (subid: string): Promise<Reservation> => {
+    const response = await apiClient.post(`/api/reservations/${subid}/waitlist/`);
+    return response.data;
+};
+
+export const suggestTable = async (params: SuggestTableParams): Promise<Table> => {
+    const response = await apiClient.get('/api/reservations/suggest-table/', { params });
+    return response.data;
 };
