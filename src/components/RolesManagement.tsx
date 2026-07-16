@@ -18,14 +18,9 @@ import {
     Activity,
     LayoutGrid,
     LayoutDashboard,
-    UserCheck,
     Award,
     Key,
-    CheckCircle,
-    XCircle,
-    ChevronRight,
-    Star,
-    Zap
+    ChevronRight
 } from 'lucide-react';
 import { useRolesList, useCreateRole, useDeleteRole, useRoleAudit, useUpdateRole } from '../hooks/useApi';
 import { Permission } from '../auth/permissions';

@@ -22,8 +22,6 @@ import {
     ChefHat,
     UtensilsCrossed,
     ArrowUp,
-    ArrowDown,
-    Star,
     Clock,
     TrendingUp
 } from 'lucide-react';
