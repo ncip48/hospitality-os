@@ -15,7 +15,17 @@ import {
     Lock,
     Calendar,
     FileText,
-    Activity
+    Activity,
+    LayoutGrid,
+    LayoutDashboard,
+    UserCheck,
+    Award,
+    Key,
+    CheckCircle,
+    XCircle,
+    ChevronRight,
+    Star,
+    Zap
 } from 'lucide-react';
 import { useRolesList, useCreateRole, useDeleteRole, useRoleAudit, useUpdateRole } from '../hooks/useApi';
 import { Permission } from '../auth/permissions';
@@ -46,38 +56,18 @@ const Modal: React.FC<{
 
     return (
         <>
-            {/* Backdrop */}
-            <div
-                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 animate-in fade-in duration-200"
-                onClick={onClose}
-            />
-
-            {/* Modal */}
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 animate-in fade-in duration-200" onClick={onClose} />
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                <div
-                    className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-8 duration-300"
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    {/* Header */}
+                <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-8 duration-300" onClick={(e) => e.stopPropagation()}>
                     <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-slate-200 px-6 py-4 flex items-center justify-between">
-                        <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                            {title}
-                        </h3>
-                        <button
-                            onClick={onClose}
-                            className="p-1 rounded-lg hover:bg-slate-100 transition-colors"
-                        >
+                        <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">{title}</h3>
+                        <button onClick={onClose} className="p-1 rounded-lg hover:bg-slate-100 transition-colors">
                             <X className="w-5 h-5 text-slate-500" />
                         </button>
                     </div>
-
-                    {/* Content */}
-                    <div className="p-6">
-                        {children}
-                    </div>
+                    <div className="p-6">{children}</div>
                 </div>
             </div>
-
             <style>{`
         @keyframes fade-in {
           from { opacity: 0; }
@@ -161,11 +151,7 @@ const AuditLogEntry: React.FC<{ entry: any }> = ({ entry }) => {
 
     const renderValue = (value: any) => {
         if (value === null || value === undefined) return "-";
-
-        if (typeof value === "boolean") {
-            return value ? "Yes" : "No";
-        }
-
+        if (typeof value === "boolean") return value ? "Yes" : "No";
         if (typeof value === "object") {
             return (
                 <pre className="whitespace-pre-wrap break-all text-xs">
@@ -173,7 +159,6 @@ const AuditLogEntry: React.FC<{ entry: any }> = ({ entry }) => {
                 </pre>
             );
         }
-
         return String(value);
     };
 
@@ -201,24 +186,13 @@ const AuditLogEntry: React.FC<{ entry: any }> = ({ entry }) => {
                     <div className="mt-2 rounded-md border border-slate-200 bg-slate-50 p-3">
                         <div className="flex items-center gap-2 mb-2">
                             <FileText className="w-3.5 h-3.5 text-slate-400" />
-                            <span className="text-xs font-semibold text-slate-500 uppercase">
-                                Details
-                            </span>
+                            <span className="text-xs font-semibold text-slate-500 uppercase">Details</span>
                         </div>
-
                         <div className="space-y-2">
                             {Object.entries(entry.detail).map(([key, value]) => (
-                                <div
-                                    key={key}
-                                    className="grid grid-cols-[140px_1fr] gap-3 text-xs"
-                                >
-                                    <span className="font-medium text-slate-500">
-                                        {formatKey(key)}
-                                    </span>
-
-                                    <span className="text-slate-700 break-all">
-                                        {renderValue(value)}
-                                    </span>
+                                <div key={key} className="grid grid-cols-[140px_1fr] gap-3 text-xs">
+                                    <span className="font-medium text-slate-500">{formatKey(key)}</span>
+                                    <span className="text-slate-700 break-all">{renderValue(value)}</span>
                                 </div>
                             ))}
                         </div>
@@ -229,12 +203,159 @@ const AuditLogEntry: React.FC<{ entry: any }> = ({ entry }) => {
     );
 };
 
+// Role Card Component
+const RoleCard: React.FC<{
+    role: any;
+    onEdit: () => void;
+    onDelete: () => void;
+    onAudit: () => void;
+}> = ({ role, onEdit, onDelete, onAudit }) => {
+    const theme = {
+        primary: '#2596be'
+    };
+
+    const getScopeIcon = (isKioskOnly: boolean) => {
+        return isKioskOnly ? <Monitor className="w-4 h-4" /> : <Globe className="w-4 h-4" />;
+    };
+
+    const getScopeLabel = (isKioskOnly: boolean) => {
+        return isKioskOnly ? 'Kiosk Only' : 'Web + Kiosk';
+    };
+
+    const getPermissionCount = (permissions: any) => {
+        if (!permissions) return 0;
+        if (Array.isArray(permissions)) return permissions.length;
+        if (typeof permissions === 'object') return Object.keys(permissions).length;
+        return 0;
+    };
+
+    return (
+        <div className="bg-white rounded-xl border border-slate-200 hover:border-[#2596be]/30 hover:shadow-lg transition-all duration-200 group overflow-hidden">
+            {/* Color Bar */}
+            <div className="h-1" style={{ backgroundColor: role.color || theme.primary }} />
+
+            <div className="p-5">
+                <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                        <div
+                            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                            style={{ backgroundColor: `${role.color || theme.primary}22` }}
+                        >
+                            <Shield className="w-5 h-5" style={{ color: role.color || theme.primary }} />
+                        </div>
+                        <div>
+                            <h4 className="font-bold text-slate-900 flex items-center gap-2">
+                                {role.name}
+                                {role.is_system && (
+                                    <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 flex items-center gap-1">
+                                        <Lock className="w-3 h-3" />
+                                        System
+                                    </span>
+                                )}
+                            </h4>
+                            <div className="flex items-center gap-2 text-xs text-slate-500 mt-0.5">
+                                <span className="flex items-center gap-1">
+                                    {getScopeIcon(role.is_kiosk_only)}
+                                    {getScopeLabel(role.is_kiosk_only)}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                            onClick={onAudit}
+                            className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
+                            title="Audit History"
+                        >
+                            <History className="w-4 h-4" />
+                        </button>
+                        {!role.is_locked && (
+                            <>
+                                <button
+                                    onClick={onEdit}
+                                    className="p-1.5 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors"
+                                    title="Edit Role"
+                                >
+                                    <Edit2 className="w-4 h-4" />
+                                </button>
+                                <button
+                                    onClick={onDelete}
+                                    className="p-1.5 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-600 transition-colors"
+                                    title="Delete Role"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </button>
+                            </>
+                        )}
+                        {role.is_locked && (
+                            <span className="text-xs text-slate-400 italic px-2">Protected</span>
+                        )}
+                    </div>
+                </div>
+
+                {/* Stats Row */}
+                <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-slate-100">
+                    <div className="text-center">
+                        <div className="flex items-center justify-center gap-1 text-sm font-medium text-slate-700">
+                            <Users className="w-3.5 h-3.5 text-slate-400" />
+                            {role.staff_count || 0}
+                        </div>
+                        <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-0.5">Staff</p>
+                    </div>
+                    <div className="text-center">
+                        <div className="flex items-center justify-center gap-1 text-sm font-medium text-slate-700">
+                            <Key className="w-3.5 h-3.5 text-slate-400" />
+                            {getPermissionCount(role.permissions)}
+                        </div>
+                        <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-0.5">Permissions</p>
+                    </div>
+                    <div className="text-center">
+                        <div className="flex items-center justify-center gap-1 text-sm font-medium text-slate-700">
+                            <Award className="w-3.5 h-3.5 text-slate-400" />
+                            {role.is_system ? 'Core' : 'Custom'}
+                        </div>
+                        <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-0.5">Type</p>
+                    </div>
+                </div>
+
+                {/* Action Button */}
+                <div className="mt-3 pt-3 border-t border-slate-100">
+                    <button
+                        onClick={onAudit}
+                        className="w-full flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors text-xs font-medium text-slate-600"
+                    >
+                        <History className="w-3.5 h-3.5" />
+                        View Audit History
+                        <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// Permission Badge Component
+const PermissionBadge: React.FC<{ permission: string }> = ({ permission }) => {
+    const formatted = permission
+        .replace(/_/g, ' ')
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+
+    return (
+        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
+            {formatted}
+        </span>
+    );
+};
+
 export const RolesManagement: React.FC = () => {
     const theme = {
         primary: '#2596be',
         primaryLight: '#2596be15',
         primaryDark: '#1a7a9e'
     };
+
+    // View State
+    const [viewMode, setViewMode] = useState<'grid' | 'compact'>('grid');
 
     // State
     const [editingRole, setEditingRole] = useState<any>(null);
@@ -245,6 +366,7 @@ export const RolesManagement: React.FC = () => {
     const [color, setColor] = useState('#2596be');
     const [isKioskOnly, setIsKioskOnly] = useState(false);
     const [activeAuditSubId, setActiveAuditSubId] = useState<string | null>(null);
+    const [selectedRoleForAudit, setSelectedRoleForAudit] = useState<any>(null);
 
     // Hooks
     const { data: rolesData, isLoading } = useRolesList();
@@ -255,6 +377,8 @@ export const RolesManagement: React.FC = () => {
         activeAuditSubId || '',
         !!activeAuditSubId
     );
+
+    const { hasPermission } = usePermission();
 
     // Handlers
     const handleCreateSubmit = (e: React.FormEvent) => {
@@ -280,10 +404,13 @@ export const RolesManagement: React.FC = () => {
             {
                 subid: String(editingRole.pk),
                 data: {
-                    name, color, permissions: permissions
+                    name,
+                    color,
+                    permissions: permissions
                         .split(',')
                         .map(p => p.trim())
-                        .filter(Boolean), is_kiosk_only: isKioskOnly
+                        .filter(Boolean),
+                    is_kiosk_only: isKioskOnly
                 }
             },
             {
@@ -301,7 +428,7 @@ export const RolesManagement: React.FC = () => {
 
     const handleEditClick = (role: any) => {
         setEditingRole(role);
-        setPermissions(role.permissions);
+        setPermissions(role.permissions?.join(', ') || '');
         setName(role.name);
         setColor(role.color);
         setIsKioskOnly(role.is_kiosk_only);
@@ -314,15 +441,23 @@ export const RolesManagement: React.FC = () => {
         }
     };
 
-    // Check if audit data is an array (list of audit entries)
+    const handleAuditClick = (role: any) => {
+        setSelectedRoleForAudit(role);
+        setActiveAuditSubId(String(role.pk));
+    };
+
     const isAuditArray = Array.isArray(auditData);
 
-    const { hasPermission } = usePermission();
+    // Stats
+    const totalRoles = rolesData?.results?.length || 0;
+    const totalStaff = rolesData?.results?.reduce((acc: number, r: any) => acc + r.staff_count, 0) || 0;
+    const systemRoles = rolesData?.results?.filter((r: any) => r.is_system).length || 0;
+    const kioskOnlyRoles = rolesData?.results?.filter((r: any) => r.is_kiosk_only).length || 0;
 
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-4">
                 <div>
                     <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
                         <Shield className="w-6 h-6" style={{ color: theme.primary }} />
@@ -332,163 +467,192 @@ export const RolesManagement: React.FC = () => {
                         Manage user roles and permissions across the platform
                     </p>
                 </div>
-                {hasPermission(Permission.ROLES_ADMIN_CREATE) && (
-                    <button
-                        onClick={() => setIsCreateModalOpen(true)}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 shadow-lg"
-                        style={{
-                            background: `linear-gradient(135deg, ${theme.primary}, ${theme.primaryDark})`,
-                            boxShadow: `0 4px 12px ${theme.primary}44`
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'translateY(-2px)';
-                            e.currentTarget.style.boxShadow = `0 8px 20px ${theme.primary}55`;
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'translateY(0)';
-                            e.currentTarget.style.boxShadow = `0 4px 12px ${theme.primary}44`;
-                        }}
-                    >
-                        <Plus className="w-4 h-4" />
-                        Create Role
-                    </button>
-                )}
+                <div className="flex items-center gap-2">
+                    {/* View Toggle */}
+                    <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-lg mr-2">
+                        <button
+                            onClick={() => setViewMode('grid')}
+                            className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white shadow-sm text-[#2596be]' : 'text-slate-500 hover:text-slate-700'}`}
+                            title="Grid View"
+                        >
+                            <LayoutGrid className="w-4 h-4" />
+                        </button>
+                        <button
+                            onClick={() => setViewMode('compact')}
+                            className={`p-2 rounded-lg transition-all ${viewMode === 'compact' ? 'bg-white shadow-sm text-[#2596be]' : 'text-slate-500 hover:text-slate-700'}`}
+                            title="Compact View"
+                        >
+                            <LayoutDashboard className="w-4 h-4" />
+                        </button>
+                    </div>
+
+                    {hasPermission(Permission.ROLES_ADMIN_CREATE) && (
+                        <button
+                            onClick={() => setIsCreateModalOpen(true)}
+                            className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-all duration-200 shadow-lg"
+                            style={{
+                                background: `linear-gradient(135deg, ${theme.primary}, ${theme.primaryDark})`,
+                                boxShadow: `0 4px 12px ${theme.primary}44`
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                e.currentTarget.style.boxShadow = `0 8px 20px ${theme.primary}55`;
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = `0 4px 12px ${theme.primary}44`;
+                            }}
+                        >
+                            <Plus className="w-4 h-4" />
+                            Create Role
+                        </button>
+                    )}
+                </div>
             </div>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-white rounded-xl border border-slate-200 p-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-md transition-shadow">
                     <div className="flex items-center justify-between">
                         <span className="text-sm text-slate-500">Total Roles</span>
-                        <Shield className="w-4 h-4 text-slate-400" />
+                        <Shield className="w-4 h-4 text-blue-500" />
                     </div>
-                    <p className="text-2xl font-bold text-slate-900 mt-1">
-                        {rolesData?.results?.length || 0}
-                    </p>
+                    <p className="text-2xl font-bold text-slate-900 mt-1">{totalRoles}</p>
                 </div>
-                <div className="bg-white rounded-xl border border-slate-200 p-4">
+                <div className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-md transition-shadow">
                     <div className="flex items-center justify-between">
                         <span className="text-sm text-slate-500">Staff Assigned</span>
-                        <Users className="w-4 h-4 text-slate-400" />
+                        <Users className="w-4 h-4 text-emerald-500" />
                     </div>
-                    <p className="text-2xl font-bold text-slate-900 mt-1">
-                        {rolesData?.results?.reduce((acc: number, r: any) => acc + r.staff_count, 0) || 0}
-                    </p>
+                    <p className="text-2xl font-bold text-slate-900 mt-1">{totalStaff}</p>
                 </div>
-                <div className="bg-white rounded-xl border border-slate-200 p-4">
+                <div className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-md transition-shadow">
+                    <div className="flex items-center justify-between">
+                        <span className="text-sm text-slate-500">System Roles</span>
+                        <Lock className="w-4 h-4 text-amber-500" />
+                    </div>
+                    <p className="text-2xl font-bold text-slate-900 mt-1">{systemRoles}</p>
+                </div>
+                <div className="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-md transition-shadow">
                     <div className="flex items-center justify-between">
                         <span className="text-sm text-slate-500">Kiosk Only</span>
-                        <Monitor className="w-4 h-4 text-slate-400" />
+                        <Monitor className="w-4 h-4 text-purple-500" />
                     </div>
-                    <p className="text-2xl font-bold text-slate-900 mt-1">
-                        {rolesData?.results?.filter((r: any) => r.is_kiosk_only).length || 0}
-                    </p>
+                    <p className="text-2xl font-bold text-slate-900 mt-1">{kioskOnlyRoles}</p>
                 </div>
             </div>
 
-            {/* Table */}
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-                {isLoading ? (
-                    <div className="p-8 text-center">
-                        <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-slate-200 border-t-[#2596be]" />
-                        <p className="mt-2 text-slate-500">Loading roles...</p>
-                    </div>
-                ) : (
-                    <div className="overflow-x-auto">
-                        <table className="w-full">
-                            <thead className="bg-slate-50 border-b border-slate-200">
-                                <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                                        Role Title
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                                        Scope Type
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                                        Staff Count
-                                    </th>
-                                    <th className="px-6 py-3 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                                        Actions
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-slate-200">
-                                {rolesData?.results.map((role: any) => (
-                                    <tr key={role.pk} className="hover:bg-slate-50/50 transition-colors">
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center gap-3">
-                                                <div
-                                                    className="w-3 h-3 rounded-full shadow-sm flex-shrink-0"
-                                                    style={{ backgroundColor: role.color }}
-                                                />
-                                                <span className="font-medium text-slate-900">{role.name}</span>
-                                                {role.is_system && (
-                                                    <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 flex items-center gap-1">
-                                                        <Lock className="w-3 h-3" />
-                                                        System
-                                                    </span>
-                                                )}
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center gap-2 text-sm">
-                                                {role.is_kiosk_only ? (
-                                                    <>
-                                                        <Monitor className="w-4 h-4 text-slate-400" />
-                                                        <span className="text-slate-600">Kiosk Dedicated</span>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <Globe className="w-4 h-4 text-slate-400" />
-                                                        <span className="text-slate-600">Web + Kiosk</span>
-                                                    </>
-                                                )}
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-sm font-medium bg-slate-100 text-slate-700">
-                                                <Users className="w-3 h-3" />
-                                                {role.staff_count}
+            {/* Roles Display */}
+            {isLoading ? (
+                <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
+                    <div className="inline-block animate-spin rounded-full h-10 w-10 border-4 border-slate-200 border-t-[#2596be]" />
+                    <p className="mt-3 text-slate-500">Loading roles...</p>
+                </div>
+            ) : rolesData?.results?.length === 0 ? (
+                <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
+                    <Shield className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                    <p className="text-slate-500 font-medium">No roles found</p>
+                    <p className="text-sm text-slate-400 mt-1">Create your first role to get started</p>
+                </div>
+            ) : viewMode === 'grid' ? (
+                // GRID VIEW
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {rolesData?.results.map((role: any) => (
+                        <RoleCard
+                            key={role.pk}
+                            role={role}
+                            onEdit={() => handleEditClick(role)}
+                            onDelete={() => handleDelete(String(role.pk), role.name)}
+                            onAudit={() => handleAuditClick(role)}
+                        />
+                    ))}
+                </div>
+            ) : (
+                // COMPACT VIEW
+                <div className="space-y-3">
+                    {rolesData?.results.map((role: any) => (
+                        <div
+                            key={role.pk}
+                            className="bg-white rounded-xl border border-slate-200 hover:border-[#2596be]/30 hover:shadow-md transition-all duration-200 group"
+                        >
+                            <div className="flex items-center justify-between p-4">
+                                <div className="flex items-center gap-4 flex-1 min-w-0">
+                                    <div
+                                        className="w-3 h-10 rounded-full flex-shrink-0"
+                                        style={{ backgroundColor: role.color || theme.primary }}
+                                    />
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center gap-2">
+                                            <h4 className="font-bold text-slate-900">{role.name}</h4>
+                                            {role.is_system && (
+                                                <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 flex items-center gap-1">
+                                                    <Lock className="w-3 h-3" />
+                                                    System
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="flex items-center gap-3 text-xs text-slate-500 mt-0.5">
+                                            <span className="flex items-center gap-1">
+                                                {role.is_kiosk_only ? <Monitor className="w-3 h-3" /> : <Globe className="w-3 h-3" />}
+                                                {role.is_kiosk_only ? 'Kiosk Only' : 'Web + Kiosk'}
                                             </span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center justify-end gap-2">
-                                                <button
-                                                    onClick={() => setActiveAuditSubId(String(role.pk))}
-                                                    className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors text-slate-500 hover:text-slate-700"
-                                                    title="View Audit History"
-                                                >
-                                                    <History className="w-4 h-4" />
-                                                </button>
-                                                {!role.is_locked && hasPermission(Permission.ROLES_ADMIN_UPDATE) && (
-                                                    <button
-                                                        onClick={() => handleEditClick(role)}
-                                                        className="p-1.5 rounded-lg hover:bg-blue-50 transition-colors text-slate-500 hover:text-blue-600"
-                                                        title="Edit Role"
-                                                    >
-                                                        <Edit2 className="w-4 h-4" />
-                                                    </button>
-                                                )}
-                                                {!role.is_locked && hasPermission(Permission.ROLES_ADMIN_DELETE) && (
-                                                    <button
-                                                        onClick={() => handleDelete(String(role.pk), role.name)}
-                                                        className="p-1.5 rounded-lg hover:bg-red-50 transition-colors text-slate-500 hover:text-red-600"
-                                                        title="Delete Role"
-                                                    >
-                                                        <Trash2 className="w-4 h-4" />
-                                                    </button>
-                                                )}
-                                                {role.is_locked && (
-                                                    <span className="text-xs text-slate-400 italic">Protected</span>
-                                                )}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
+                                            <span className="flex items-center gap-1">
+                                                <Users className="w-3 h-3" />
+                                                {role.staff_count || 0} staff
+                                            </span>
+                                            <span className="flex items-center gap-1">
+                                                <Key className="w-3 h-3" />
+                                                {role.permissions?.length || 0} permissions
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-1 flex-shrink-0 ml-4">
+                                    <button
+                                        onClick={() => handleAuditClick(role)}
+                                        className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
+                                        title="Audit History"
+                                    >
+                                        <History className="w-4 h-4" />
+                                    </button>
+                                    {!role.is_locked && hasPermission(Permission.ROLES_ADMIN_UPDATE) && (
+                                        <button
+                                            onClick={() => handleEditClick(role)}
+                                            className="p-1.5 rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors"
+                                            title="Edit Role"
+                                        >
+                                            <Edit2 className="w-4 h-4" />
+                                        </button>
+                                    )}
+                                    {!role.is_locked && hasPermission(Permission.ROLES_ADMIN_DELETE) && (
+                                        <button
+                                            onClick={() => handleDelete(String(role.pk), role.name)}
+                                            className="p-1.5 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-600 transition-colors"
+                                            title="Delete Role"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </button>
+                                    )}
+                                    {role.is_locked && (
+                                        <span className="text-xs text-slate-400 italic px-2">Protected</span>
+                                    )}
+                                    <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-slate-500 transition-colors" />
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {/* Footer */}
+            <div className="flex items-center justify-between text-xs text-slate-400">
+                <span>
+                    Showing {rolesData?.results?.length || 0} roles
+                </span>
+                <span>
+                    {viewMode === 'grid' ? 'Grid View' : 'Compact View'}
+                </span>
             </div>
 
             {/* Audit Side Panel */}
@@ -498,9 +662,17 @@ export const RolesManagement: React.FC = () => {
                         <h3 className="font-bold text-slate-900 flex items-center gap-2">
                             <History className="w-5 h-5" style={{ color: theme.primary }} />
                             Audit Log
+                            {selectedRoleForAudit && (
+                                <span className="text-sm font-normal text-slate-500">
+                                    - {selectedRoleForAudit.name}
+                                </span>
+                            )}
                         </h3>
                         <button
-                            onClick={() => setActiveAuditSubId(null)}
+                            onClick={() => {
+                                setActiveAuditSubId(null);
+                                setSelectedRoleForAudit(null);
+                            }}
                             className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
                         >
                             <X className="w-5 h-5 text-slate-500" />
@@ -529,7 +701,6 @@ export const RolesManagement: React.FC = () => {
                                 ))}
                             </div>
                         ) : auditData && !isAuditArray ? (
-                            // Handle case where audit data might be an object (single entry)
                             <div className="space-y-3">
                                 <AuditLogEntry entry={auditData} />
                             </div>
@@ -547,16 +718,10 @@ export const RolesManagement: React.FC = () => {
             )}
 
             {/* Create Modal */}
-            <Modal
-                isOpen={isCreateModalOpen}
-                onClose={() => setIsCreateModalOpen(false)}
-                title="Create New Role"
-            >
+            <Modal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} title="Create New Role">
                 <form onSubmit={handleCreateSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                            Role Name
-                        </label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1.5">Role Name</label>
                         <div className="relative">
                             <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                             <input
@@ -565,19 +730,14 @@ export const RolesManagement: React.FC = () => {
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="e.g., Manager, Supervisor"
                                 className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-shadow"
-                                style={{
-                                    borderColor: '#e2e8f0',
-                                    outlineColor: theme.primary
-                                }}
+                                style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
                                 required
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                            Role Color
-                        </label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1.5">Role Color</label>
                         <div className="flex items-center gap-3">
                             <input
                                 type="color"
@@ -585,9 +745,7 @@ export const RolesManagement: React.FC = () => {
                                 onChange={(e) => setColor(e.target.value)}
                                 className="w-12 h-12 rounded-lg border border-slate-300 cursor-pointer p-1"
                             />
-                            <code className="text-sm bg-slate-100 px-3 py-1 rounded-lg font-mono">
-                                {color}
-                            </code>
+                            <code className="text-sm bg-slate-100 px-3 py-1 rounded-lg font-mono">{color}</code>
                         </div>
                     </div>
 
@@ -636,16 +794,10 @@ export const RolesManagement: React.FC = () => {
             </Modal>
 
             {/* Edit Modal */}
-            <Modal
-                isOpen={isEditModalOpen}
-                onClose={() => setIsEditModalOpen(false)}
-                title={`Edit Role: ${editingRole?.name || ''}`}
-            >
+            <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title={`Edit Role: ${editingRole?.name || ''}`}>
                 <form onSubmit={handleEditSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                            Role Name
-                        </label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1.5">Role Name</label>
                         <div className="relative">
                             <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                             <input
@@ -654,19 +806,14 @@ export const RolesManagement: React.FC = () => {
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="e.g., Manager, Supervisor"
                                 className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-shadow"
-                                style={{
-                                    borderColor: '#e2e8f0',
-                                    outlineColor: theme.primary
-                                }}
+                                style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
                                 required
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                            Role Color
-                        </label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1.5">Role Color</label>
                         <div className="flex items-center gap-3">
                             <input
                                 type="color"
@@ -674,31 +821,24 @@ export const RolesManagement: React.FC = () => {
                                 onChange={(e) => setColor(e.target.value)}
                                 className="w-12 h-12 rounded-lg border border-slate-300 cursor-pointer p-1"
                             />
-                            <code className="text-sm bg-slate-100 px-3 py-1 rounded-lg font-mono">
-                                {color}
-                            </code>
+                            <code className="text-sm bg-slate-100 px-3 py-1 rounded-lg font-mono">{color}</code>
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                            Permissions
-                        </label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1.5">Permissions (comma separated)</label>
                         <div className="relative">
-                            <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                            <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                             <input
                                 type="text"
                                 value={permissions}
                                 onChange={(e) => setPermissions(e.target.value)}
-                                placeholder="e.g., Manager, Supervisor"
+                                placeholder="e.g., view_dashboard, edit_menu, manage_users"
                                 className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 transition-shadow"
-                                style={{
-                                    borderColor: '#e2e8f0',
-                                    outlineColor: theme.primary
-                                }}
-                                required
+                                style={{ borderColor: '#e2e8f0', outlineColor: theme.primary }}
                             />
                         </div>
+                        <p className="text-xs text-slate-400 mt-1">Separate permissions with commas</p>
                     </div>
 
                     <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
