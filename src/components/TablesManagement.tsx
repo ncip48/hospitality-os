@@ -124,6 +124,7 @@ export const TablesManagement: React.FC = () => {
     };
 
     const handleEditClick = (table: Table) => {
+        setEditingTable(table)
         setActiveTable(table);
         setLabel(table.label);
         setSeats(table.seats);
@@ -147,6 +148,7 @@ export const TablesManagement: React.FC = () => {
     };
 
     const handleWalkinClick = (table: Table) => {
+        setEditingTable(table);
         setActiveTable(table);
         setWalkinGuests(table.seats);
         setIsWalkinModalOpen(true);
