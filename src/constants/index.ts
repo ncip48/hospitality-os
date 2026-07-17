@@ -7,7 +7,7 @@ import {
     FolderKanban,
     UtensilsCrossed,
     LayoutGrid,
-    CalendarDays
+    CalendarDays,
 } from 'lucide-react';
 import { Permission } from '../auth/permissions';
 
@@ -18,8 +18,15 @@ export const THEME = {
     primaryGradient: 'linear-gradient(135deg, #2596be, #1a7a9e)'
 };
 
+export type NavType = {
+    path: string;
+    icon: any;
+    label: string;
+    permission: string | null;
+}
 
-export const NAV_ITEMS = [
+
+export const NAV_ITEMS: NavType[] = [
     {
         path: '/dashboard',
         icon: LayoutDashboard,
