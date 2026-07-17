@@ -3,7 +3,6 @@ import {
     LogOut,
     User,
     ChevronDown,
-    Building2,
     Clock
 } from 'lucide-react';
 import { useMe, useLogout } from '../hooks/useApi';
@@ -98,15 +97,15 @@ export const SidebarProfile: React.FC = () => {
                                 <User className="w-3.5 h-3.5" />
                                 <span>ID: {profile.pk?.slice(0, 12)}...</span>
                             </div>
-                            {profile.email && (
+                            {/* {profile.username && (
                                 <div className="flex items-center gap-2 text-xs text-slate-400">
                                     <Building2 className="w-3.5 h-3.5" />
-                                    <span>{profile.email}</span>
+                                    <span>{profile.username}</span>
                                 </div>
-                            )}
+                            )} */}
                             <div className="flex items-center gap-2 text-xs text-slate-400">
                                 <Clock className="w-3.5 h-3.5" />
-                                <span>Member since {new Date(profile.created_at).toLocaleDateString()}</span>
+                                <span>Member since {new Date(profile.date_joined).toLocaleDateString()}</span>
                             </div>
                         </div>
                     </div>
