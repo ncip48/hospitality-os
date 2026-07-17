@@ -4,15 +4,11 @@ import {
     CheckCircle,
     Bell,
     Search,
-    ChevronDown,
     Clock,
-    Users,
-    Activity,
     Sparkles,
     Zap
 } from 'lucide-react';
 import { NAV_ITEMS, PAGE_DESCRIPTIONS } from '../constants';
-import { THEME } from '../constants';
 
 export const Header: React.FC = () => {
     const location = useLocation();
