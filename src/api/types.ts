@@ -50,7 +50,7 @@ export interface VenueLocation {
 }
 
 export interface Role {
-    pk: number;
+    pk: string;
     name: string;
     color: string;
     is_system: boolean;
@@ -61,7 +61,7 @@ export interface Role {
 }
 
 export interface Staff {
-    pk: number;
+    pk: string;
     username: string;
     full_name: string;
     role: Role;
@@ -126,7 +126,7 @@ export interface AttendanceSummary {
 // 4. Menu Category Types
 // ==========================================
 export interface MenuCategory {
-    pk: number;
+    pk: string;
     name: string;
     sort_order?: number;
     item_count?: number; // Live calculation counter for items assigned to this category
@@ -148,7 +148,7 @@ export interface PaginatedMenuCategoryList {
 // 5. Menu Item Types
 // ==========================================
 export interface MenuItem {
-    pk: number;
+    pk: string;
     name: string;
     category: MenuCategory | null;
     price: string; // Transmitted as string to preserve exact decimal precision
