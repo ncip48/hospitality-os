@@ -95,7 +95,7 @@ export const SidebarProfile: React.FC = () => {
                         <div className="space-y-2">
                             <div className="flex items-center gap-2 text-xs text-slate-400">
                                 <User className="w-3.5 h-3.5" />
-                                <span>ID: {profile.pk?.slice(0, 12)}...</span>
+                                <span>ID: {profile.pk?.slice(0, 20)}...</span>
                             </div>
                             {/* {profile.username && (
                                 <div className="flex items-center gap-2 text-xs text-slate-400">
