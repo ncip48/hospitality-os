@@ -1,26 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import {
     LogOut,
-    ChevronRight,
     User,
     Settings,
     HelpCircle,
-    Bell,
     ChevronDown,
-    Circle,
-    CheckCircle,
-    UserCheck,
     Building2,
-    Clock,
-    Award,
-    Sparkles,
-    Shield,
-    Crown
+    Clock
 } from 'lucide-react';
 import { useMe, useLogout } from '../hooks/useApi';
-import { NAV_ITEMS, THEME } from '../constants';
-import { usePermission } from '../hooks/usePermission';
+import { THEME } from '../constants';
 
 // Sidebar Profile Component
 export const SidebarProfile: React.FC = () => {
