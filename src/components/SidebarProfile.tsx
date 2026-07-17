@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import {
     LogOut,
     User,
-    Settings,
-    HelpCircle,
     ChevronDown,
     Building2,
     Clock
@@ -113,24 +111,6 @@ export const SidebarProfile: React.FC = () => {
                         </div>
                     </div>
                 )}
-            </div>
-
-            {/* Quick Actions */}
-            <div className="px-4 pb-3 flex items-center gap-2">
-                <button
-                    className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 transition-colors text-xs text-slate-400 hover:text-white"
-                    onClick={() => {/* Implement settings */ }}
-                >
-                    <Settings className="w-3.5 h-3.5" />
-                    Settings
-                </button>
-                <button
-                    className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 transition-colors text-xs text-slate-400 hover:text-white"
-                    onClick={() => {/* Implement help */ }}
-                >
-                    <HelpCircle className="w-3.5 h-3.5" />
-                    Help
-                </button>
             </div>
 
             {/* Logout Button */}
